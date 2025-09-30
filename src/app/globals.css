@@ -30,20 +30,11 @@ body {
   background-attachment: fixed;
 }
 
-/* Circular Bird Animation Styles */
-.bird-circle-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-}
-
-.bird-orbit {
-  position: absolute;
-  top: 0;
-  left: 0;
-  animation: orbit 10s linear infinite;
+/* Random Direction Bird Animation Styles */
+.bird-container {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
 }
 
 .bird {
@@ -51,18 +42,8 @@ body {
   background-size: auto 100%;
   width: 60px;
   height: 85px;
-  will-change: background-position;
+  will-change: background-position, transform;
   animation: fly-cycle 1s steps(10) infinite;
-  transform: translateX(-30px) translateY(-42.5px);
-}
-
-@keyframes orbit {
-  from {
-    transform: rotate(0deg) translateX(600px) rotate(-90deg);
-  }
-  to {
-    transform: rotate(-360deg) translateX(600px) rotate(-90deg);
-  }
 }
 
 @keyframes fly-cycle {
