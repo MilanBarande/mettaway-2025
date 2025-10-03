@@ -86,10 +86,19 @@ export async function POST(request: NextRequest) {
       // Reset attempts on successful login
       rateLimitMap.delete(key);
       
-      return NextResponse.json({
+      const response = NextResponse.json({
         success: true,
         message: 'Password correct! Access granted.'
       });
+      
+      response.cookies.set('mettaway_auth', 'true', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 // 24 hours
+      });
+      
+      return response;
     } else {
       return NextResponse.json({
         success: false,

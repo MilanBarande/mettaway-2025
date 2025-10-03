@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/Button";
 
 export function PasswordForm() {
+  const router = useRouter();
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
@@ -34,6 +36,10 @@ export function PasswordForm() {
       if (result.success) {
         setPassword("");
         setIsRateLimited(false);
+        // Redirect to registration page after a brief delay
+        setTimeout(() => {
+          router.push('/register');
+        }, 1000);
       }
     } catch (error) {
       setMessage("An error occurred. Please try again.");
