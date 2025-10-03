@@ -8,6 +8,7 @@ export function PasswordForm() {
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRateLimited, setIsRateLimited] = useState(false);
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,9 +29,11 @@ export function PasswordForm() {
       
       setMessage(result.message);
       setIsSuccess(result.success);
+      setIsRateLimited(result.rateLimited || false);
       
       if (result.success) {
         setPassword("");
+        setIsRateLimited(false);
       }
     } catch (error) {
       setMessage("An error occurred. Please try again.");
@@ -49,9 +52,9 @@ export function PasswordForm() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter password"
           className="px-4 py-2 rounded-md bg-white/90 backdrop-blur-sm text-gray-900 placeholder-gray-500 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[250px]"
-          disabled={isLoading}
+          disabled={isLoading || isRateLimited}
         />
-        <Button type="submit" disabled={isLoading || !password}>
+        <Button type="submit" disabled={isLoading || !password || isRateLimited}>
           {isLoading ? 'Checking...' : 'Submit'}
         </Button>
       </div>
@@ -60,7 +63,9 @@ export function PasswordForm() {
           <p className={`text-sm px-4 py-2 rounded-lg backdrop-blur-md text-center ${
             isSuccess
               ? 'bg-green-500/30 text-green-100' 
-              : 'bg-red-500/30 text-red-100'
+              : isRateLimited
+                ? 'bg-orange-500/30 text-orange-100'
+                : 'bg-red-500/30 text-red-100'
           }`}>
             {message}
           </p>
