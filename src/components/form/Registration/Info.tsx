@@ -1,39 +1,10 @@
-"use client";
-
-import { useState } from "react";
 import { Button } from "@/components/Button";
 
-export function RegistrationForm() {
-  const [currentStep, setCurrentStep] = useState(1);
+type InfoProps = {
+  onNext: () => void;
+};
 
-  const nextStep = () => {
-    if (currentStep < 5) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const prevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  return (
-    <div className="w-full max-w-6xl mx-auto px-6 md:px-8 lg:px-4">
-      <div className="bg-black/40 backdrop-blur-md rounded shadow-xl h-[92vh] md:h-[85vh] overflow-y-auto scrollbar-hide">
-        <div className="p-4 md:p-8 lg:p-12">
-          {currentStep === 1 && <Step1 onNext={nextStep} />}
-          {currentStep === 2 && <Step2 onNext={nextStep} onPrev={prevStep} />}
-          {currentStep === 3 && <Step3 onNext={nextStep} onPrev={prevStep} />}
-          {currentStep === 4 && <Step4 onNext={nextStep} onPrev={prevStep} />}
-          {currentStep === 5 && <Step5 onPrev={prevStep} />}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Step1({ onNext }: { onNext: () => void }) {
+export function Info({ onNext }: InfoProps) {
   return (
     <div className="flex flex-col gap-6 pt-4">
       <div className="prose prose-lg max-w-none text-white">
@@ -118,62 +89,6 @@ function Step1({ onNext }: { onNext: () => void }) {
         <Button onClick={onNext}>
           Embark on the Journey
         </Button>
-      </div>
-    </div>
-  );
-}
-
-function Step2({ onNext, onPrev }: { onNext: () => void; onPrev: () => void }) {
-  return (
-    <div className="flex flex-col gap-6 pt-4">
-      <h2 className="text-2xl font-bold text-white">Step 2</h2>
-      <p className="text-gray-200">Step 2 content will go here.</p>
-      
-      <div className="flex justify-between pt-4">
-        <Button variant="secondary" onClick={onPrev}>Back</Button>
-        <Button onClick={onNext}>Next</Button>
-      </div>
-    </div>
-  );
-}
-
-function Step3({ onNext, onPrev }: { onNext: () => void; onPrev: () => void }) {
-  return (
-    <div className="flex flex-col gap-6 pt-4">
-      <h2 className="text-2xl font-bold text-white">Step 3</h2>
-      <p className="text-gray-200">Step 3 content will go here.</p>
-      
-      <div className="flex justify-between pt-4">
-        <Button variant="secondary" onClick={onPrev}>Back</Button>
-        <Button onClick={onNext}>Next</Button>
-      </div>
-    </div>
-  );
-}
-
-function Step4({ onNext, onPrev }: { onNext: () => void; onPrev: () => void }) {
-  return (
-    <div className="flex flex-col gap-6 pt-4">
-      <h2 className="text-2xl font-bold text-white">Step 4</h2>
-      <p className="text-gray-200">Step 4 content will go here.</p>
-      
-      <div className="flex justify-between pt-4">
-        <Button variant="secondary" onClick={onPrev}>Back</Button>
-        <Button onClick={onNext}>Next</Button>
-      </div>
-    </div>
-  );
-}
-
-function Step5({ onPrev }: { onPrev: () => void }) {
-  return (
-    <div className="flex flex-col gap-6 pt-4">
-      <h2 className="text-2xl font-bold text-white">Step 5</h2>
-      <p className="text-gray-200">Step 5 content will go here.</p>
-      
-      <div className="flex justify-between pt-4">
-        <Button variant="secondary" onClick={onPrev}>Back</Button>
-        <Button type="submit">Submit</Button>
       </div>
     </div>
   );

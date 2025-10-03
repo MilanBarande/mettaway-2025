@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { RegistrationForm } from "@/components/form/RegistrationForm";
+import { RegistrationForm } from "@/components/form/Registration/RegistrationForm";
 
 export default function RegisterPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

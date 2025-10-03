@@ -1,9 +1,9 @@
 import { ButtonHTMLAttributes } from 'react';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+type ButtonProps = {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary';
-}
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export function Button({ children, className = '', variant = 'primary', ...props }: ButtonProps) {
   const baseClasses = "px-4 py-2 font-medium rounded-md shadow-sm hover:shadow-md disabled:cursor-not-allowed cursor-pointer transition-colors duration-150";
