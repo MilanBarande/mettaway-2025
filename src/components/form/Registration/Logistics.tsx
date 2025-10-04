@@ -251,15 +251,6 @@ export function Logistics({ onNext, onPrev, defaultValues }: LogisticsProps) {
         <Button variant="secondary" type="button" onClick={onPrev}>
           Back
         </Button>
-        {isDev && (
-          <Button
-            variant="secondary"
-            type="button"
-            onClick={() => onNext({} as LogisticsFormData)}
-          >
-            Skip (Dev)
-          </Button>
-        )}
         <Button type="submit">Next</Button>
       </div>
     </form>

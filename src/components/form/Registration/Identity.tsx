@@ -126,15 +126,6 @@ export function Identity({ onNext, onPrev, defaultValues }: IdentityProps) {
         <Button variant="secondary" type="button" onClick={onPrev}>
           Back
         </Button>
-        {isDev && (
-          <Button
-            variant="secondary"
-            type="button"
-            onClick={() => onNext({} as IdentityFormData)}
-          >
-            Skip (Dev)
-          </Button>
-        )}
         <Button type="submit">Next</Button>
       </div>
     </form>

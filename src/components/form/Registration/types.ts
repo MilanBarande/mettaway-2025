@@ -32,10 +32,37 @@ export const logisticsSchema = z.object({
 
 export type LogisticsFormData = z.infer<typeof logisticsSchema>;
 
+// Step 4 (Workshops & Music) validation schema
+export const workshopsMusicSchema = z.object({
+  organizeWorkshop: z.boolean().optional(),
+  workshopTitle: z.string().optional(),
+  workshopDayTime: z.string().optional(),
+  workshopDescription: z.string().optional(),
+  workshopSpace: z.string().optional(),
+  shareSpace: z.string().optional(),
+  playDjSet: z.boolean().optional(),
+  djDayTime: z.string().optional(),
+  soundcloudLink: z.string().optional(),
+  musicStyle: z.string().optional(),
+  playUnplugged: z.boolean().optional(),
+  unpluggedDescription: z.string().optional(),
+});
+
+export type WorkshopsMusicFormData = z.infer<typeof workshopsMusicSchema>;
+
+// Step 5 (Contribution) validation schema
+export const contributionSchema = z.object({
+  contributionAmount: z.string().min(1, "Please select a contribution amount"),
+  paymentMethod: z.string().min(1, "Please select a payment method"),
+});
+
+export type ContributionFormData = z.infer<typeof contributionSchema>;
+
 // All registration data
 export type RegistrationData = {
   identity?: IdentityFormData;
   logistics?: LogisticsFormData;
-  // Add other steps as they're defined
+  workshopsMusic?: WorkshopsMusicFormData;
+  contribution?: ContributionFormData;
 };
 

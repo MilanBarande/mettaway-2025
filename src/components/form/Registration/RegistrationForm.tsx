@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Info } from "./Info";
 import { Identity } from "./Identity";
 import { Logistics } from "./Logistics";
-import { Step4 } from "./Step4";
-import { Step5 } from "./Step5";
-import { RegistrationData, IdentityFormData, LogisticsFormData } from "./types";
+import { WorkshopsMusic } from "./WorkshopsMusic";
+import { Contribution } from "./Contribution";
+import { RegistrationData, IdentityFormData, LogisticsFormData, WorkshopsMusicFormData, ContributionFormData } from "./types";
 
 export function RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -34,6 +34,19 @@ export function RegistrationForm() {
     nextStep();
   };
 
+  const handleWorkshopsMusicSubmit = (data: WorkshopsMusicFormData) => {
+    setFormData({ ...formData, workshopsMusic: data });
+    nextStep();
+  };
+
+  const handleContributionSubmit = (data: ContributionFormData) => {
+    const finalData = { ...formData, contribution: data };
+    setFormData(finalData);
+    // TODO: Submit the complete form data to API
+    console.log("Complete registration data:", finalData);
+    alert("Registration submitted! (This is a placeholder - implement API submission)");
+  };
+
   return (
     <div className="w-full max-w-6xl mx-auto px-6 md:px-8 lg:px-4">
       <div className="bg-black/40 backdrop-blur-md rounded shadow-xl h-[92vh] md:h-[85vh] overflow-y-auto scrollbar-hide">
@@ -53,8 +66,20 @@ export function RegistrationForm() {
               defaultValues={formData.logistics}
             />
           )}
-          {currentStep === 4 && <Step4 onNext={nextStep} onPrev={prevStep} />}
-          {currentStep === 5 && <Step5 onPrev={prevStep} />}
+          {currentStep === 4 && (
+            <WorkshopsMusic
+              onNext={handleWorkshopsMusicSubmit}
+              onPrev={prevStep}
+              defaultValues={formData.workshopsMusic}
+            />
+          )}
+          {currentStep === 5 && (
+            <Contribution
+              onSubmit={handleContributionSubmit}
+              onPrev={prevStep}
+              defaultValues={formData.contribution}
+            />
+          )}
         </div>
       </div>
     </div>
