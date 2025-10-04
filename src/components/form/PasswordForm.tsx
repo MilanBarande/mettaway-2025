@@ -4,13 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/Button";
 
-export function PasswordForm() {
+export function PasswordForm({ onRedirecting }: { onRedirecting?: (redirecting: boolean) => void }) {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isRateLimited, setIsRateLimited] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,10 +37,12 @@ export function PasswordForm() {
       if (result.success) {
         setPassword("");
         setIsRateLimited(false);
+        setIsRedirecting(true);
+        onRedirecting?.(true);
         // Redirect to registration page after a brief delay
         setTimeout(() => {
           router.push('/register');
-        }, 1000);
+        }, 800);
       }
     } catch (error) {
       setMessage("An error occurred. Please try again.");
@@ -48,6 +51,10 @@ export function PasswordForm() {
       setIsLoading(false);
     }
   };
+
+  if (isRedirecting) {
+    return null;
+  }
 
   return (
     <form onSubmit={handlePasswordSubmit} className="flex flex-col items-center gap-2">

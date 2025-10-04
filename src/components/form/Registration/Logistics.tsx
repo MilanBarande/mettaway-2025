@@ -8,6 +8,7 @@ import { CheckboxGroup } from "@/components/form/inputs/CheckboxGroup";
 import { Checkbox } from "@/components/form/inputs/Checkbox";
 import { Textarea } from "@/components/form/inputs/Textarea";
 import { logisticsSchema, LogisticsFormData } from "./types";
+import { isDev } from "@/lib/constants";
 
 type LogisticsProps = {
   onNext: (data: LogisticsFormData) => void;
@@ -24,7 +25,7 @@ export function Logistics({ onNext, onPrev, defaultValues }: LogisticsProps) {
     setValue,
     control,
   } = useForm<LogisticsFormData>({
-    resolver: zodResolver(logisticsSchema),
+    resolver: isDev ? undefined : zodResolver(logisticsSchema),
     defaultValues,
   });
 
@@ -250,6 +251,15 @@ export function Logistics({ onNext, onPrev, defaultValues }: LogisticsProps) {
         <Button variant="secondary" type="button" onClick={onPrev}>
           Back
         </Button>
+        {isDev && (
+          <Button
+            variant="secondary"
+            type="button"
+            onClick={() => onNext({} as LogisticsFormData)}
+          >
+            Skip (Dev)
+          </Button>
+        )}
         <Button type="submit">Next</Button>
       </div>
     </form>

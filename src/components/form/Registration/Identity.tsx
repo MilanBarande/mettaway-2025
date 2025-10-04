@@ -6,6 +6,7 @@ import { Select } from "@/components/form/inputs/Select";
 import { RadioGroup } from "@/components/form/inputs/RadioGroup";
 import { Textarea } from "@/components/form/inputs/Textarea";
 import { identitySchema, IdentityFormData } from "./types";
+import { isDev } from "@/lib/constants";
 
 type IdentityProps = {
   onNext: (data: IdentityFormData) => void;
@@ -21,7 +22,7 @@ export function Identity({ onNext, onPrev, defaultValues }: IdentityProps) {
     watch,
     setValue,
   } = useForm<IdentityFormData>({
-    resolver: zodResolver(identitySchema),
+    resolver: isDev ? undefined : zodResolver(identitySchema),
     defaultValues,
   });
 
@@ -125,6 +126,15 @@ export function Identity({ onNext, onPrev, defaultValues }: IdentityProps) {
         <Button variant="secondary" type="button" onClick={onPrev}>
           Back
         </Button>
+        {isDev && (
+          <Button
+            variant="secondary"
+            type="button"
+            onClick={() => onNext({} as IdentityFormData)}
+          >
+            Skip (Dev)
+          </Button>
+        )}
         <Button type="submit">Next</Button>
       </div>
     </form>

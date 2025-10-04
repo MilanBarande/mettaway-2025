@@ -7,6 +7,7 @@ import { useState } from "react";
 
 export default function Home() {
   const [count, setCount] = useState(0);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   
   const addBird = () => {
     if (count < 140) {
@@ -18,17 +19,26 @@ export default function Home() {
     <div className="font-sans flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <Birds count={count} />
       
-      {/* Password Form */}
+      {/* Password Form / Loading */}
       <div className="flex flex-col items-center gap-6">
-        <PasswordForm />
+        {isRedirecting ? (
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+            <p className="text-white text-lg">Redirecting to registration...</p>
+          </div>
+        ) : (
+          <>
+            <PasswordForm onRedirecting={setIsRedirecting} />
 
-        {/* Birds */}
-        <div className="flex flex-col items-center gap-2 mt-8">
-          <Button onClick={addBird} disabled={count >= 140}>Add Bird</Button>
-          <p className="text-sm text-white px-4 py-2 rounded-lg backdrop-blur-md bg-black/30 text-center">
-            {count} {count === 1 ? 'bird' : 'birds'} ready to fly, {140 - count} {140 - count === 1 ? 'place' : 'places'} left in the nest
-          </p>
-        </div>
+            {/* Birds */}
+            <div className="flex flex-col items-center gap-2 mt-8">
+              <Button onClick={addBird} disabled={count >= 140}>Add Bird</Button>
+              <p className="text-sm text-white px-4 py-2 rounded-lg backdrop-blur-md bg-black/30 text-center">
+                {count} {count === 1 ? 'bird' : 'birds'} ready to fly, {140 - count} {140 - count === 1 ? 'place' : 'places'} left in the nest
+              </p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
