@@ -39,12 +39,32 @@ export function RegistrationForm() {
     nextStep();
   };
 
-  const handleContributionSubmit = (data: ContributionFormData) => {
+  const handleContributionSubmit = async (data: ContributionFormData) => {
     const finalData = { ...formData, contribution: data };
     setFormData(finalData);
-    // TODO: Submit the complete form data to API
-    console.log("Complete registration data:", finalData);
-    alert("Registration submitted! (This is a placeholder - implement API submission)");
+    
+    try {
+      const response = await fetch('/api/submit-registration', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(finalData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`Registration submitted successfully! Your submission ID is: ${result.submissionId}`);
+        console.log('Notion page created:', result.notionPageId);
+      } else {
+        alert(`Error submitting registration: ${result.details || result.error}`);
+        console.error('Submission error:', result);
+      }
+    } catch (error) {
+      alert('Network error. Please try again.');
+      console.error('Network error:', error);
+    }
   };
 
   return (
