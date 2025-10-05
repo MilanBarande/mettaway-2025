@@ -27,7 +27,7 @@ Sentry.init({
   debug: false,
 
   // Show error modal before sending to Sentry
-  beforeSend(event, hint) {
+  beforeSend(event, _hint) {
     // Show the error modal to the user
     showGlobalErrorModal();
     

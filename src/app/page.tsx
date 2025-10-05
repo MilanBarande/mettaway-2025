@@ -2,10 +2,10 @@
 
 import { Birds } from "@/components/Birds";
 import { PasswordForm } from "@/components/form/PasswordForm";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function Home() {
+function HomeContent() {
   const [count, setCount] = useState(0);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const searchParams = useSearchParams();
@@ -61,5 +61,17 @@ export default function Home() {
         )}
       </div>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <main className="font-sans flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+        <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+      </main>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }
