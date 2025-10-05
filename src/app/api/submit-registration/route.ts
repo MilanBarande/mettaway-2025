@@ -164,6 +164,25 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Send confirmation email
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/send-confirmation-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: data.identity.firstName,
+          lastName: data.identity.lastName,
+          email: data.identity.email,
+          submissionId,
+        }),
+      });
+    } catch (emailError) {
+      console.error('Error sending confirmation email:', emailError);
+      // Don't fail the registration if email fails
+    }
+
     return NextResponse.json({
       success: true,
       submissionId,

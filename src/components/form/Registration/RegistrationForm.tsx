@@ -82,7 +82,7 @@ export function RegistrationForm() {
       identity: {
         firstName: "Test",
         lastName: "User",
-        email: "test@example.com",
+        email: "milan.barande@gmail.com",
         phone: "+41 79 123 45 67",
         referredBy: "Friend Name",
         previousVoyages: "2",

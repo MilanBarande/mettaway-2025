@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/Button";
 import { RadioGroup } from "@/components/form/inputs/RadioGroup";
 import { contributionSchema, ContributionFormData } from "./types";
-import { isDev } from "@/lib/constants";
+import { isDev, PAYMENT_INFO } from "@/lib/constants";
 
 type ContributionProps = {
   onSubmit: (data: ContributionFormData) => void;
@@ -27,10 +27,8 @@ export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionPr
 
   const contributionAmountValue = watch("contributionAmount");
 
-  const iban = "CH77 0078 7007 7169 1140 9";
-
   const copyIban = () => {
-    navigator.clipboard.writeText(iban.replace(/\s/g, ""));
+    navigator.clipboard.writeText(PAYMENT_INFO.iban.replace(/\s/g, ""));
     setIbanCopied(true);
     setTimeout(() => setIbanCopied(false), 2000);
   };
@@ -94,10 +92,10 @@ export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionPr
           If the financial contribution prohibits you from participating, please reach out to 
           us - we are your friends:{" "}
           <a
-            href="mailto:hotzluc@pm.me"
+            href={`mailto:${PAYMENT_INFO.contactEmail}`}
             className="text-blue-300 hover:text-blue-100 underline cursor-pointer"
           >
-            hotzluc@pm.me
+            {PAYMENT_INFO.contactEmail}
           </a>
         </p>
       </div>
@@ -112,7 +110,7 @@ export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionPr
             Money transfers can be made in the following ways:
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4">
-            <li>Revolut directly to Lukas Hotz (+41 79 288 68 53)</li>
+            <li>Revolut directly to {PAYMENT_INFO.revolut.name} ({PAYMENT_INFO.revolut.phone})</li>
             <li>
               Bank transfer to{" "}
               <span className="relative inline-block">
@@ -122,7 +120,7 @@ export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionPr
                   className="inline-flex items-center gap-1 text-blue-300 hover:text-blue-100 underline cursor-pointer font-mono"
                   title="Click to copy IBAN"
                 >
-                  {iban}
+                  {PAYMENT_INFO.iban}
                   <svg 
                     xmlns="http://www.w3.org/2000/svg" 
                     width="14" 
@@ -145,12 +143,12 @@ export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionPr
                   </span>
                 )}
               </span>
-              , appricot GmbH, Industriestrasse 70, 6300 Zug, Switzerland
+              , {PAYMENT_INFO.accountHolder}, {PAYMENT_INFO.address}
             </li>
             <li>
               Twint using{" "}
               <a
-                href="https://go.twint.ch/1/e/tw?tw=acq.N_syTGB2S22l8iFj2bOfdrVCi15qZNvseICaSQyvpc0ZmjpIn1MPE6CKOzOenu7T."
+                href={PAYMENT_INFO.twint.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-300 hover:text-blue-100 underline cursor-pointer"
