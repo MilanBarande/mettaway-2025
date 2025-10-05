@@ -65,6 +65,8 @@ export function RegistrationForm() {
       if (result.success) {
         console.log('Registration submitted successfully! Submission ID:', result.submissionId);
         console.log('Notion page created:', result.notionPageId);
+        // Redirect to homepage with success indicator
+        window.location.href = '/?registered=true';
       } else {
         alert(`Error submitting registration: ${result.details || result.error}`);
         console.error('Submission error:', result);
