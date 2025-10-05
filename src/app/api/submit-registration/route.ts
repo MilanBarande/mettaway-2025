@@ -46,7 +46,6 @@ type RegistrationData = {
   };
   contribution: {
     contributionAmount: string;
-    paymentMethod: string;
   };
 };
 
@@ -56,12 +55,6 @@ export async function POST(request: NextRequest) {
 
     // Generate submission ID using UUID
     const submissionId = randomUUID();
-
-    // Map payment method
-    const paymentChannelMap: Record<string, string> = {
-      'revolut': 'Revolut',
-      'bank-transfer': 'Bank Transfer',
-    };
 
     // Create Notion page
     const response = await notion.pages.create({
@@ -93,13 +86,6 @@ export async function POST(request: NextRequest) {
         },
         'Amount Paid CHF': {
           number: null,
-        },
-        'Payment Channel': {
-          rich_text: [{ 
-            text: { 
-              content: paymentChannelMap[data.contribution.paymentMethod] || '' 
-            } 
-          }],
         },
         'Thursday': {
           checkbox: data.logistics.nights.includes('thursday'),
@@ -191,3 +177,4 @@ export async function POST(request: NextRequest) {
   }
 }
 
+  

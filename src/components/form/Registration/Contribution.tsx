@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/Button";
@@ -12,6 +13,8 @@ type ContributionProps = {
 };
 
 export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionProps) {
+  const [ibanCopied, setIbanCopied] = useState(false);
+
   const {
     handleSubmit,
     formState: { errors },
@@ -23,17 +26,19 @@ export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionPr
   });
 
   const contributionAmountValue = watch("contributionAmount");
-  const paymentMethodValue = watch("paymentMethod");
+
+  const iban = "CH77 0078 7007 7169 1140 9";
+
+  const copyIban = () => {
+    navigator.clipboard.writeText(iban.replace(/\s/g, ""));
+    setIbanCopied(true);
+    setTimeout(() => setIbanCopied(false), 2000);
+  };
 
   const contributionOptions = [
-    { value: "195", label: "195+ CHF/EUR" },
-    { value: "160", label: "160 CHF/EUR" },
-    { value: "125", label: "125 CHF/EUR" },
-  ];
-
-  const paymentMethodOptions = [
-    { value: "revolut", label: "Revolut" },
-    { value: "bank-transfer", label: "Bank Transfer" },
+    { value: "200", label: "200+ CHF/EUR" },
+    { value: "175", label: "175 CHF/EUR" },
+    { value: "150", label: "150 CHF/EUR" },
   ];
 
   return (
@@ -42,7 +47,7 @@ export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionPr
         <h2 className="text-3xl font-bold text-white mb-4">Contribution</h2>
         <div className="text-gray-200 space-y-4">
           <p>
-            To make the journey to the Metta Games possible for as many as possible, we provide 
+            To make the journey to Ventara possible for as many as possible, we provide 
             you three price suggestions.
           </p>
           <p>
@@ -52,21 +57,21 @@ export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionPr
           </p>
           <div className="space-y-2">
             <p>
-              <strong>A: 195+ CHF/EUR</strong>
+              <strong>A: 200+ CHF/EUR</strong>
               <br />
               if you can buy things without thinking about cash.
               <br />
               This price covers for a traveller with fewer means.
             </p>
             <p>
-              <strong>B: 160 CHF/EUR</strong>
+              <strong>B: 175 CHF/EUR</strong>
               <br />
               if you have to be a bit conscious about your spendings, but you&apos;re generally fine.
               <br />
               This price covers the cost.
             </p>
             <p>
-              <strong>C: 125 CHF/EUR</strong>
+              <strong>C: 150 CHF/EUR</strong>
               <br />
               if you have to keep track of your monthly budget.
             </p>
@@ -109,21 +114,53 @@ export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionPr
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>Revolut directly to Lukas Hotz (+41 79 288 68 53)</li>
             <li>
-              Bank transfer to CH76 0839 0035 9569 1000 2, Alternative Bank Schweiz, 
-              (Lukas Hotz, Zentralstrasse 37, 8003 Zürich, Switzerland)
+              Bank transfer to{" "}
+              <span className="relative inline-block">
+                <button
+                  type="button"
+                  onClick={copyIban}
+                  className="inline-flex items-center gap-1 text-blue-300 hover:text-blue-100 underline cursor-pointer font-mono"
+                  title="Click to copy IBAN"
+                >
+                  {iban}
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="14" 
+                    height="14" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                    className="inline-block"
+                  >
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                </button>
+                {ibanCopied && (
+                  <span className="absolute left-1/2 -translate-x-1/2 -top-8 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                    Copied!
+                  </span>
+                )}
+              </span>
+              , appricot GmbH, Industriestrasse 70, 6300 Zug, Switzerland
+            </li>
+            <li>
+              Twint using{" "}
+              <a
+                href="https://go.twint.ch/1/e/tw?tw=acq.N_syTGB2S22l8iFj2bOfdrVCi15qZNvseICaSQyvpc0ZmjpIn1MPE6CKOzOenu7T."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-300 hover:text-blue-100 underline cursor-pointer"
+              >
+                this link
+              </a>
             </li>
           </ul>
+          
         </div>
-
-        <RadioGroup
-          label="Twint has some transaction limits unfortunately, if it fails, please use Revolut or a bank transfer."
-          name="paymentMethod"
-          options={paymentMethodOptions}
-          required
-          value={paymentMethodValue}
-          onChange={(value) => setValue("paymentMethod", value)}
-          error={errors.paymentMethod?.message}
-        />
       </div>
 
       <div className="flex justify-between pt-4">

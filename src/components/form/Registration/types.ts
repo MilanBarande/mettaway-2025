@@ -53,7 +53,6 @@ export type WorkshopsMusicFormData = z.infer<typeof workshopsMusicSchema>;
 // Step 5 (Contribution) validation schema
 export const contributionSchema = z.object({
   contributionAmount: z.string().min(1, "Please select a contribution amount"),
-  paymentMethod: z.string().min(1, "Please select a payment method"),
 });
 
 export type ContributionFormData = z.infer<typeof contributionSchema>;

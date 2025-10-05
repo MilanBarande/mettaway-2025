@@ -142,7 +142,7 @@ export function WorkshopsMusic({ onNext, onPrev, defaultValues }: WorkshopsMusic
 
             <TextInput
               label=""
-              placeholder="Style/description of music"
+              placeholder="Style/Energy of my set"
               {...register("musicStyle")}
               error={errors.musicStyle?.message}
             />

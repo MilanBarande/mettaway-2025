@@ -29,7 +29,6 @@ export function Logistics({ onNext, onPrev, defaultValues }: LogisticsProps) {
     defaultValues,
   });
 
-  const nightsValue = watch("nights") || [];
   const transportationValue = watch("transportation");
   const sleepingValue = watch("sleepingArrangement");
   const takeMealLeadValue = watch("takeMealLead");
@@ -53,7 +52,6 @@ export function Logistics({ onNext, onPrev, defaultValues }: LogisticsProps) {
     { value: "own-van", label: "I'll be sleeping in my own van" },
     { value: "someone-else-van", label: "I'll be sleeping in someone else's van (and that person knows it)" },
     { value: "tent", label: "I'll be sleeping in a tent" },
-    { value: "hut-own-mattress", label: "I'll be sleeping in the wooden hut on my own mattress" },
     { value: "bring-mattress", label: "I will bring my own mattress" },
     { value: "sharing-bed", label: "I'll be sharing the bed with someone (who knows about it)" },
     { value: "need-bed", label: "I'll need a bed on site" },
@@ -78,8 +76,8 @@ export function Logistics({ onNext, onPrev, defaultValues }: LogisticsProps) {
   const timelineItems = [
     { day: "Thursday", activity: "Arrival & Building" },
     { day: "Friday", activity: "Decoration" },
-    { day: "Saturday", activity: "The games are on" },
-    { day: "Sunday", activity: "Recovery" },
+    { day: "Saturday", activity: "We let the winds take us" },
+    { day: "Sunday", activity: "Build down and relax" },
     { day: "Monday", activity: "Tear down" },
   ];
 
@@ -117,7 +115,7 @@ export function Logistics({ onNext, onPrev, defaultValues }: LogisticsProps) {
           control={control}
           render={({ field }) => (
             <CheckboxGroup
-              label="Which nights would you like to spend at the Metta Games?"
+              label="Which nights would you like to spend at Ventara?"
               name="nights"
               options={nightOptions}
               required
