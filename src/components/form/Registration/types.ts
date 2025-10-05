@@ -79,6 +79,38 @@ export const oracleSchema = z.object({
   question4: z.string().min(1, "Please answer this question"),
   question4Other: z.string().optional(),
   birdCategory: z.string().optional(),
+}).refine((data) => {
+  if (data.question1 === "other" && (!data.question1Other || data.question1Other.trim() === "")) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Please specify your answer",
+  path: ["question1Other"],
+}).refine((data) => {
+  if (data.question2 === "other" && (!data.question2Other || data.question2Other.trim() === "")) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Please specify your answer",
+  path: ["question2Other"],
+}).refine((data) => {
+  if (data.question3 === "other" && (!data.question3Other || data.question3Other.trim() === "")) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Please specify your answer",
+  path: ["question3Other"],
+}).refine((data) => {
+  if (data.question4 === "other" && (!data.question4Other || data.question4Other.trim() === "")) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Please specify your answer",
+  path: ["question4Other"],
 });
 
 export type OracleFormData = z.infer<typeof oracleSchema>;

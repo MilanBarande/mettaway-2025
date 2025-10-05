@@ -16,6 +16,7 @@ type OracleProps = {
 export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
   const [isConsulting, setIsConsulting] = useState(false);
   const [birdCategory, setBirdCategory] = useState<BirdType | null>(null);
+  const [hasConsulted, setHasConsulted] = useState(false);
 
   const {
     register,
@@ -71,11 +72,35 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
   ];
 
   const consultOracle = async () => {
+    // In non-dev mode, only allow consulting once
+    if (!isDev && hasConsulted) {
+      alert("The Metta-Oracle has already spoken. Your destiny has been revealed!");
+      return;
+    }
+
     const values = getValues();
     
     // Check if all questions are answered
     if (!values.question1 || !values.question2 || !values.question3 || !values.question4) {
       alert("Please answer all questions before consulting the Metta-Oracle");
+      return;
+    }
+
+    // Check if "other" is selected, that the text field is filled
+    if (values.question1 === "other" && (!values.question1Other || values.question1Other.trim() === "")) {
+      alert("Please specify your answer for question 1");
+      return;
+    }
+    if (values.question2 === "other" && (!values.question2Other || values.question2Other.trim() === "")) {
+      alert("Please specify your answer for question 2");
+      return;
+    }
+    if (values.question3 === "other" && (!values.question3Other || values.question3Other.trim() === "")) {
+      alert("Please specify your answer for question 3");
+      return;
+    }
+    if (values.question4 === "other" && (!values.question4Other || values.question4Other.trim() === "")) {
+      alert("Please specify your answer for question 4");
       return;
     }
 
@@ -104,6 +129,7 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
       if (result.success) {
         setBirdCategory(result.birdCategory);
         setValue("birdCategory", result.birdCategory);
+        setHasConsulted(true);
       } else {
         alert(`Error consulting oracle: ${result.error}`);
       }
@@ -143,16 +169,19 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
             onChange={(value) => setValue("question1", value)}
             error={errors.question1?.message}
           />
-          {question1Value === "other" && (
-            <div className="mt-4">
-              <TextInput
-                label="Please specify"
-                placeholder="Your answer..."
-                {...register("question1Other")}
-                error={errors.question1Other?.message}
-              />
-            </div>
-          )}
+          <div className="mt-2">
+            <TextInput
+              label="If other, please specify"
+              placeholder="Your answer..."
+              {...register("question1Other")}
+              onChange={(e) => {
+                if (e.target.value && question1Value !== "other") {
+                  setValue("question1", "other");
+                }
+              }}
+              error={errors.question1Other?.message}
+            />
+          </div>
         </div>
 
         <div>
@@ -165,16 +194,19 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
             onChange={(value) => setValue("question2", value)}
             error={errors.question2?.message}
           />
-          {question2Value === "other" && (
-            <div className="mt-4">
-              <TextInput
-                label="Please specify"
-                placeholder="Your answer..."
-                {...register("question2Other")}
-                error={errors.question2Other?.message}
-              />
-            </div>
-          )}
+          <div className="mt-2">
+            <TextInput
+              label="If other, please specify"
+              placeholder="Your answer..."
+              {...register("question2Other")}
+              onChange={(e) => {
+                if (e.target.value && question2Value !== "other") {
+                  setValue("question2", "other");
+                }
+              }}
+              error={errors.question2Other?.message}
+            />
+          </div>
         </div>
 
         <div>
@@ -187,16 +219,19 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
             onChange={(value) => setValue("question3", value)}
             error={errors.question3?.message}
           />
-          {question3Value === "other" && (
-            <div className="mt-4">
-              <TextInput
-                label="Please specify"
-                placeholder="Your answer..."
-                {...register("question3Other")}
-                error={errors.question3Other?.message}
-              />
-            </div>
-          )}
+          <div className="mt-2">
+            <TextInput
+              label="If other, please specify"
+              placeholder="Your answer..."
+              {...register("question3Other")}
+              onChange={(e) => {
+                if (e.target.value && question3Value !== "other") {
+                  setValue("question3", "other");
+                }
+              }}
+              error={errors.question3Other?.message}
+            />
+          </div>
         </div>
 
         <div>
@@ -209,26 +244,29 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
             onChange={(value) => setValue("question4", value)}
             error={errors.question4?.message}
           />
-          {question4Value === "other" && (
-            <div className="mt-4">
-              <TextInput
-                label="Please specify"
-                placeholder="Your answer..."
-                {...register("question4Other")}
-                error={errors.question4Other?.message}
-              />
-            </div>
-          )}
+          <div className="mt-2">
+            <TextInput
+              label="If other, please specify"
+              placeholder="Your answer..."
+              {...register("question4Other")}
+              onChange={(e) => {
+                if (e.target.value && question4Value !== "other") {
+                  setValue("question4", "other");
+                }
+              }}
+              error={errors.question4Other?.message}
+            />
+          </div>
         </div>
 
-        <div className="flex flex-col items-center gap-4 py-4">
+        <div className="flex flex-col items-center md:items-end gap-4 py-4">
           <Button
             type="button"
             onClick={consultOracle}
-            disabled={isConsulting}
+            disabled={isConsulting || (!isDev && hasConsulted)}
             className="min-w-[250px]"
           >
-            {isConsulting ? "Consulting..." : "Consult the Metta-Oracle"}
+            {isConsulting ? "Consulting..." : hasConsulted && !isDev ? "Oracle Consulted" : "Consult the Metta-Oracle"}
           </Button>
           
           {isConsulting && (
@@ -239,7 +277,7 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
           )}
           
           {birdCategory && !isConsulting && (
-            <div className="bg-blue-500/20 border-2 border-blue-400 rounded-lg p-6 text-center animate-fade-in">
+            <div className="bg-blue-500/20 border-2 border-blue-400 rounded-lg p-6 text-center animate-fade-in md:self-stretch">
               <p className="text-white text-xl font-semibold mb-2">
                 The Metta-Oracle has spoken...
               </p>
