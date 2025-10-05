@@ -1,5 +1,23 @@
 import { z } from "zod";
 
+// Bird categories
+export const BIRD_CATEGORIES = [
+  "Birds of Paradise",
+  "Origami Birds",
+  "Walking Birds",
+  "Ocean Birds",
+  "Dinosaur Birds",
+  "Cartoon Birds",
+  "Chicks",
+  "Mecha Birds",
+  "Night Birds",
+  "Dark Birds",
+  "Mythological Birds",
+  "Birds of Prey",
+] as const;
+
+export type BirdType = typeof BIRD_CATEGORIES[number];
+
 // Step 2 (Identity) validation schema
 export const identitySchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -50,7 +68,22 @@ export const workshopsMusicSchema = z.object({
 
 export type WorkshopsMusicFormData = z.infer<typeof workshopsMusicSchema>;
 
-// Step 5 (Contribution) validation schema
+// Step 5 (Oracle) validation schema
+export const oracleSchema = z.object({
+  question1: z.string().min(1, "Please answer this question"),
+  question1Other: z.string().optional(),
+  question2: z.string().min(1, "Please answer this question"),
+  question2Other: z.string().optional(),
+  question3: z.string().min(1, "Please answer this question"),
+  question3Other: z.string().optional(),
+  question4: z.string().min(1, "Please answer this question"),
+  question4Other: z.string().optional(),
+  birdCategory: z.string().optional(),
+});
+
+export type OracleFormData = z.infer<typeof oracleSchema>;
+
+// Step 6 (Contribution) validation schema
 export const contributionSchema = z.object({
   contributionAmount: z.string().min(1, "Please select a contribution amount"),
 });
@@ -63,5 +96,6 @@ export type RegistrationData = {
   logistics?: LogisticsFormData;
   workshopsMusic?: WorkshopsMusicFormData;
   contribution?: ContributionFormData;
+  birdCategory?: BirdType;
 };
 

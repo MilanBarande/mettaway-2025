@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client } from '@notionhq/client';
 import { randomUUID } from 'crypto';
+import { BirdType } from '@/components/form/Registration/types';
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const DATABASE_ID = '26732652a3f3817b9ba5ca78b8725aca';
@@ -47,6 +48,7 @@ type RegistrationData = {
   contribution: {
     contributionAmount: string;
   };
+  birdCategory?: BirdType;
 };
 
 export async function POST(request: NextRequest) {
@@ -155,6 +157,9 @@ export async function POST(request: NextRequest) {
         },
         'Sleeping arrangement': {
           rich_text: [{ text: { content: data.logistics.sleepingArrangement } }],
+        },
+        'Bird Category': {
+          rich_text: [{ text: { content: data.birdCategory || '' } }],
         },
       },
     });

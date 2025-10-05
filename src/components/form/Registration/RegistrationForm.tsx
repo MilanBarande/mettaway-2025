@@ -5,8 +5,9 @@ import { Info } from "./Info";
 import { Identity } from "./Identity";
 import { Logistics } from "./Logistics";
 import { WorkshopsMusic } from "./WorkshopsMusic";
+import { Oracle } from "./Oracle";
 import { Contribution } from "./Contribution";
-import { RegistrationData, IdentityFormData, LogisticsFormData, WorkshopsMusicFormData, ContributionFormData } from "./types";
+import { RegistrationData, IdentityFormData, LogisticsFormData, WorkshopsMusicFormData, OracleFormData, ContributionFormData, BirdType } from "./types";
 import { isDev } from "@/lib/constants";
 import { Button } from "@/components/Button";
 
@@ -15,7 +16,7 @@ export function RegistrationForm() {
   const [formData, setFormData] = useState<RegistrationData>({});
 
   const nextStep = () => {
-    if (currentStep < 5) {
+    if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -38,6 +39,11 @@ export function RegistrationForm() {
 
   const handleWorkshopsMusicSubmit = (data: WorkshopsMusicFormData) => {
     setFormData({ ...formData, workshopsMusic: data });
+    nextStep();
+  };
+
+  const handleOracleSubmit = (data: OracleFormData) => {
+    setFormData({ ...formData, birdCategory: data.birdCategory as BirdType });
     nextStep();
   };
 
@@ -109,9 +115,9 @@ export function RegistrationForm() {
         unpluggedDescription: "Acoustic guitar vibes",
       },
       contribution: {
-        contributionAmount: "160",
-        paymentMethod: "revolut",
+        contributionAmount: "200",
       },
+      birdCategory: "Birds of Paradise",
     };
 
     try {
@@ -138,10 +144,43 @@ export function RegistrationForm() {
     }
   };
 
+  const testOracleAPI = async () => {
+    try {
+      const response = await fetch('/api/categorize-bird', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question1: "antiquity",
+          question2: "mystical",
+          question3: "shadows",
+          question4: "lightning",
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`Oracle API Test Successful!\n\nBird Category: ${result.birdCategory}`);
+        console.log('Bird category:', result.birdCategory);
+      } else {
+        alert(`Oracle API Error: ${result.error}`);
+        console.error('Oracle error:', result);
+      }
+    } catch (error) {
+      alert('Network error testing Oracle API.');
+      console.error('Oracle API test error:', error);
+    }
+  };
+
   return (
     <div className="w-full max-w-6xl mx-auto px-6 md:px-8 lg:px-4">
       {isDev && (
-        <div className="mb-4 flex justify-center">
+        <div className="mb-4 flex justify-center gap-4">
+          <Button onClick={testOracleAPI} className="bg-purple-600 hover:bg-purple-700">
+            🔮 Test Oracle API (Dev Only)
+          </Button>
           <Button onClick={handleTestSubmit} className="bg-green-600 hover:bg-green-700">
             🧪 Test Submit (Dev Only)
           </Button>
@@ -172,6 +211,13 @@ export function RegistrationForm() {
             />
           )}
           {currentStep === 5 && (
+            <Oracle
+              onNext={handleOracleSubmit}
+              onPrev={prevStep}
+              defaultValues={undefined}
+            />
+          )}
+          {currentStep === 6 && (
             <Contribution
               onSubmit={handleContributionSubmit}
               onPrev={prevStep}
