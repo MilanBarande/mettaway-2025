@@ -6,36 +6,57 @@ const DATABASE_ID = '26732652a3f3817b9ba5ca78b8725aca';
 
 export async function GET() {
   try {
-    // Search for all pages in the database
-    const response = await notion.search({
-      filter: {
-        property: 'object',
-        value: 'page'
-      },
-      page_size: 100,
-    });
+    // Fetch all pages with pagination
+    let allPages = [];
+    let startCursor = undefined;
+    let hasMore = true;
 
-    // Filter results to only include pages from our database
-    const databasePages = response.results.filter((page) => {
+    while (hasMore) {
+      const response = await notion.search({
+        filter: { property: 'object', value: 'page' },
+        page_size: 100,
+        start_cursor: startCursor,
+      });
+
+      allPages.push(...response.results);
+      hasMore = response.has_more;
+      startCursor = response.next_cursor ?? undefined;
+    }
+
+    // Filter for our database pages, excluding templates (empty title)
+    const registrations = allPages.filter((page) => {
+      // Check parent matches our database
       if (!('parent' in page) || !page.parent) return false;
-      return page.parent.type === 'database_id' && 
-             'database_id' in page.parent &&
-             page.parent.database_id?.replace(/-/g, '') === DATABASE_ID;
+      
+      const parent = page.parent as { database_id?: string };
+      if (!parent.database_id) return false;
+      
+      const cleanDbId = parent.database_id.replace(/-/g, '');
+      if (cleanDbId !== DATABASE_ID) return false;
+
+      // Exclude template pages (empty title)
+      if ('properties' in page && page.properties) {
+        const titleProp = Object.values(page.properties as Record<string, { type: string; title?: Array<unknown> }>)
+          .find(prop => prop.type === 'title');
+        
+        if (titleProp && (!titleProp.title || titleProp.title.length === 0)) {
+          return false;
+        }
+      }
+
+      return true;
     });
 
-    // Return the count of pages (registrations)
     return NextResponse.json({
       success: true,
-      count: databasePages.length,
+      count: registrations.length,
     });
   } catch (error) {
     console.error('Error fetching registration count:', error);
-    console.error('Error details:', error instanceof Error ? error.message : 'Unknown error');
     return NextResponse.json(
       { 
         success: false, 
         error: 'Failed to fetch registration count',
-        details: error instanceof Error ? error.message : 'Unknown error',
         count: 0,
       },
       { status: 500 }
