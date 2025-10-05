@@ -33,9 +33,9 @@ export default function RegisterPage() {
 
   if (isLoading) {
     return (
-      <div className="font-sans flex flex-col items-center justify-center h-screen overflow-hidden">
+      <main className="font-sans flex flex-col items-center justify-center h-screen overflow-hidden">
         <p className="text-white text-lg">Loading...</p>
-      </div>
+      </main>
     );
   }
 
@@ -44,9 +44,9 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="font-sans flex flex-col items-center justify-center h-screen overflow-hidden py-4 md:py-8">
+    <main className="font-sans flex flex-col items-center justify-center h-screen overflow-hidden py-4 md:py-8">
       <RegistrationForm />
-    </div>
+    </main>
   );
 }
 
