@@ -63,7 +63,7 @@ export function RegistrationForm() {
       const result = await response.json();
 
       if (result.success) {
-        alert(`Registration submitted successfully! Your submission ID is: ${result.submissionId}`);
+        console.log('Registration submitted successfully! Submission ID:', result.submissionId);
         console.log('Notion page created:', result.notionPageId);
       } else {
         alert(`Error submitting registration: ${result.details || result.error}`);

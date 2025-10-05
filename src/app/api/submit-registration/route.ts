@@ -3,7 +3,7 @@ import { Client } from '@notionhq/client';
 import { randomUUID } from 'crypto';
 import { BirdType } from '@/components/form/Registration/types';
 
-const notion = new Client({ auth: process.env.NOTION_API_KEY });
+const notion = new Client({ auth: process.env.NOTION_INTEGRATION_SECRET });
 const DATABASE_ID = '26732652a3f3817b9ba5ca78b8725aca';
 
 type RegistrationData = {
@@ -48,7 +48,7 @@ type RegistrationData = {
   contribution: {
     contributionAmount: string;
   };
-  birdCategory?: BirdType;
+  birdCategory: BirdType;
 };
 
 export async function POST(request: NextRequest) {
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       parent: { database_id: DATABASE_ID },
       properties: {
         'Submission ID': {
-          rich_text: [{ text: { content: submissionId } }],
+          title: [{ text: { content: submissionId } }],
         },
         'Submitted at': {
           date: { start: new Date().toISOString() },
@@ -89,32 +89,32 @@ export async function POST(request: NextRequest) {
         'Amount Paid CHF': {
           number: null,
         },
-        'Thursday': {
+        'Thu': {
           checkbox: data.logistics.nights.includes('thursday'),
         },
-        'Friday': {
+        'Fri': {
           checkbox: data.logistics.nights.includes('friday'),
         },
-        'Saturday': {
+        'Sat': {
           checkbox: data.logistics.nights.includes('saturday'),
         },
-        'Sunday': {
+        'Sun': {
           checkbox: data.logistics.nights.includes('sunday'),
         },
         'City': {
           rich_text: [{ text: { content: data.logistics.city } }],
         },
         'Country': {
-          rich_text: [{ text: { content: data.logistics.country } }],
+          select: { name: data.logistics.country },
         },
         'Allergies': {
           rich_text: [{ text: { content: data.identity.allergies || '' } }],
         },
-        'Stuff to know': {
+        'Stuff to know about me': {
           rich_text: [{ text: { content: data.identity.conditions || '' } }],
         },
         'Travelling by': {
-          rich_text: [{ text: { content: data.logistics.transportation } }],
+          select: { name: data.logistics.transportation },
         },
         'Phone': {
           rich_text: [{ text: { content: data.identity.phone } }],
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
         'Kitchen lead': {
           checkbox: data.logistics.takeMealLead || false,
         },
-        'Kitchen Lead wishes': {
+        'Kitchen Lead Wishes': {
           rich_text: [{ text: { content: data.logistics.mealPreference || '' } }],
         },
         'Kitchen Experience': {
@@ -146,20 +146,20 @@ export async function POST(request: NextRequest) {
         'Unplugged description': {
           rich_text: [{ text: { content: data.workshopsMusic?.unpluggedDescription || '' } }],
         },
-        'Doctor': {
+        'Doctors': {
           checkbox: data.logistics.hasMedicalEducation || false,
         },
-        'Medical experience': {
+        'Medical Experience': {
           rich_text: [{ text: { content: data.logistics.medicalBackground || '' } }],
         },
-        '# of previous mettaways': {
-          rich_text: [{ text: { content: data.identity.previousVoyages } }],
+        '# of previous Mettaways': {
+          number: parseInt(data.identity.previousVoyages) || 0,
         },
-        'Sleeping arrangement': {
-          rich_text: [{ text: { content: data.logistics.sleepingArrangement } }],
+        'Sleeping Arrangement': {
+          select: { name: data.logistics.sleepingArrangement },
         },
         'Bird Category': {
-          rich_text: [{ text: { content: data.birdCategory || '' } }],
+          select: data.birdCategory ? { name: data.birdCategory } : null,
         },
       },
     });
