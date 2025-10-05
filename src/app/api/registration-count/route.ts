@@ -16,9 +16,11 @@ export async function GET() {
     });
 
     // Filter results to only include pages from our database
-    const databasePages = response.results.filter((page: any) => {
-      return page.parent?.type === 'database_id' && 
-             page.parent?.database_id?.replace(/-/g, '') === DATABASE_ID;
+    const databasePages = response.results.filter((page) => {
+      if (!('parent' in page) || !page.parent) return false;
+      return page.parent.type === 'database_id' && 
+             'database_id' in page.parent &&
+             page.parent.database_id?.replace(/-/g, '') === DATABASE_ID;
     });
 
     // Return the count of pages (registrations)

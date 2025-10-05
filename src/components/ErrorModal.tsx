@@ -42,7 +42,7 @@ export function ErrorModal({ isOpen = true, onClose }: ErrorModalProps) {
             </h2>
             <p className="text-gray-200 mb-4 leading-relaxed">
               Our developer has been automatically informed and this should be fixed soon. 
-              Please contact us on Telegram if you still can't register in 3 days.
+              Please contact us on Telegram if you still can&apos;t register in 3 days.
             </p>
             <button
               onClick={onClose}
