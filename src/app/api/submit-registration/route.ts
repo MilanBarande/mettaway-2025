@@ -164,23 +164,31 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Send confirmation email
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/send-confirmation-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName: data.identity.firstName,
-          lastName: data.identity.lastName,
-          email: data.identity.email,
-          submissionId,
-        }),
-      });
-    } catch (emailError) {
-      console.error('Error sending confirmation email:', emailError);
-      // Don't fail the registration if email fails
+    // Send confirmation email (only if Resend API key is configured)
+    if (process.env.RESEND_API_KEY) {
+      try {
+        const emailResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/send-confirmation-email`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            firstName: data.identity.firstName,
+            lastName: data.identity.lastName,
+            email: data.identity.email,
+            submissionId,
+          }),
+        });
+        
+        if (!emailResponse.ok) {
+          console.error('Failed to send confirmation email, but registration succeeded');
+        }
+      } catch (emailError) {
+        console.error('Error sending confirmation email:', emailError);
+        // Don't fail the registration if email fails
+      }
+    } else {
+      console.log('Skipping email - RESEND_API_KEY not configured');
     }
 
     return NextResponse.json({

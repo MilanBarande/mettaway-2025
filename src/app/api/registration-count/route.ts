@@ -6,16 +6,25 @@ const DATABASE_ID = '26732652a3f3817b9ba5ca78b8725aca';
 
 export async function GET() {
   try {
-    // Query the database to get all entries
-    const response = await notion.databases.query({
-      database_id: DATABASE_ID,
-      page_size: 100, // Notion default is 100, adjust if you expect more
+    // Search for all pages in the database
+    const response = await notion.search({
+      filter: {
+        property: 'object',
+        value: 'page'
+      },
+      page_size: 100,
+    });
+
+    // Filter results to only include pages from our database
+    const databasePages = response.results.filter((page: any) => {
+      return page.parent?.type === 'database_id' && 
+             page.parent?.database_id?.replace(/-/g, '') === DATABASE_ID;
     });
 
     // Return the count of pages (registrations)
     return NextResponse.json({
       success: true,
-      count: response.results.length,
+      count: databasePages.length,
     });
   } catch (error) {
     console.error('Error fetching registration count:', error);
