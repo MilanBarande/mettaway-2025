@@ -169,7 +169,7 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
             onChange={(value) => setValue("question1", value)}
             error={errors.question1?.message}
           />
-          <div className="mt-2">
+          <div className="mt-2 md:max-w-md">
             <TextInput
               label="If other, please specify"
               placeholder="Your answer..."
@@ -194,7 +194,7 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
             onChange={(value) => setValue("question2", value)}
             error={errors.question2?.message}
           />
-          <div className="mt-2">
+          <div className="mt-2 md:max-w-md">
             <TextInput
               label="If other, please specify"
               placeholder="Your answer..."
@@ -219,7 +219,7 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
             onChange={(value) => setValue("question3", value)}
             error={errors.question3?.message}
           />
-          <div className="mt-2">
+          <div className="mt-2 md:max-w-md">
             <TextInput
               label="If other, please specify"
               placeholder="Your answer..."
@@ -244,7 +244,7 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
             onChange={(value) => setValue("question4", value)}
             error={errors.question4?.message}
           />
-          <div className="mt-2">
+          <div className="mt-2 md:max-w-md">
             <TextInput
               label="If other, please specify"
               placeholder="Your answer..."
@@ -282,7 +282,7 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
                 The Metta-Oracle has spoken...
               </p>
               <p className="text-blue-200 text-2xl font-bold">
-                You are definitely part of the {birdCategory} family
+                You are part of the {birdCategory} family
               </p>
             </div>
           )}
