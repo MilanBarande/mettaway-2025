@@ -192,7 +192,7 @@ export function Logistics({ onNext, onPrev, defaultValues }: LogisticsProps) {
             follow in due time).
           </p>
           <p>
-            The Minister of Nutrition (Laurin) is going to plan all the food for the entire duration 
+            The Minister of Nutrition (Sascha) is going to plan all the food for the entire duration 
             of the games. He&apos;s looking for sou-chefs who take the lead for one of the 10 meals 
             (brunches, dinners, late night snacks).
           </p>
