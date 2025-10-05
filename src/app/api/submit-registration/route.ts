@@ -55,6 +55,50 @@ export async function POST(request: NextRequest) {
   try {
     const data: RegistrationData = await request.json();
 
+    // Check for existing registration with same email using search API
+    const searchResponse = await notion.search({
+      filter: {
+        property: 'object',
+        value: 'page'
+      },
+      page_size: 100,
+    });
+
+    // Filter for pages from our database with matching email
+    const existingRegistration = searchResponse.results.find((page) => {
+      if (!('parent' in page) || !page.parent) return false;
+      
+      const parent = page.parent as { database_id?: string };
+      if (!parent.database_id) return false;
+      
+      const cleanDbId = parent.database_id.replace(/-/g, '');
+      if (cleanDbId !== DATABASE_ID) return false;
+
+      // Check if email matches
+      if ('properties' in page && page.properties) {
+        const props = page.properties as Record<string, { type: string; rich_text?: Array<{ plain_text?: string }>; title?: Array<{ plain_text?: string }> }>;
+        const emailProp = props['Email'];
+        
+        if (emailProp?.rich_text && emailProp.rich_text[0]?.plain_text === data.identity.email) {
+          // Check if it has a title (not a template)
+          const titleProp = Object.values(props).find(prop => prop.type === 'title');
+          return titleProp?.title && titleProp.title.length > 0;
+        }
+      }
+      
+      return false;
+    });
+
+    if (existingRegistration) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'A registration with this email already exists',
+        },
+        { status: 409 } // 409 Conflict
+      );
+    }
+
     // Generate submission ID using UUID
     const submissionId = randomUUID();
 

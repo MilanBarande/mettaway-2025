@@ -10,9 +10,10 @@ type ContributionProps = {
   onSubmit: (data: ContributionFormData) => void;
   onPrev: () => void;
   defaultValues?: Partial<ContributionFormData>;
+  isSubmitting?: boolean;
 };
 
-export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionProps) {
+export function Contribution({ onSubmit, onPrev, defaultValues, isSubmitting = false }: ContributionProps) {
   const [ibanCopied, setIbanCopied] = useState(false);
 
   const {
@@ -162,10 +163,12 @@ export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionPr
       </div>
 
       <div className="flex justify-between pt-4">
-        <Button variant="secondary" type="button" onClick={onPrev}>
+        <Button variant="secondary" type="button" onClick={onPrev} disabled={isSubmitting}>
           Back
         </Button>
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Submit'}
+        </Button>
       </div>
     </form>
   );

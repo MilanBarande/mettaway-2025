@@ -14,6 +14,7 @@ import { Button } from "@/components/Button";
 export function RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<RegistrationData>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const nextStep = () => {
     if (currentStep < 6) {
@@ -48,8 +49,11 @@ export function RegistrationForm() {
   };
 
   const handleContributionSubmit = async (data: ContributionFormData) => {
+    if (isSubmitting) return; // Prevent double submission
+    
     const finalData = { ...formData, contribution: data };
     setFormData(finalData);
+    setIsSubmitting(true);
     
     try {
       const response = await fetch('/api/submit-registration', {
@@ -70,10 +74,12 @@ export function RegistrationForm() {
       } else {
         alert(`Error submitting registration: ${result.details || result.error}`);
         console.error('Submission error:', result);
+        setIsSubmitting(false);
       }
     } catch (error) {
       alert('Network error. Please try again.');
       console.error('Network error:', error);
+      setIsSubmitting(false);
     }
   };
 
@@ -233,6 +239,7 @@ export function RegistrationForm() {
               onSubmit={handleContributionSubmit}
               onPrev={prevStep}
               defaultValues={formData.contribution}
+              isSubmitting={isSubmitting}
             />
           )}
         </div>
