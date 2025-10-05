@@ -174,18 +174,27 @@ export function RegistrationForm() {
     }
   };
 
+  const goToOracle = () => {
+    setCurrentStep(5);
+  };
+
   return (
     <div className="w-full max-w-6xl mx-auto px-6 md:px-8 lg:px-4">
-      {isDev && (
-        <div className="mb-4 flex justify-center gap-4">
-          <Button onClick={testOracleAPI} className="bg-purple-600 hover:bg-purple-700">
-            🔮 Test Oracle API (Dev Only)
-          </Button>
-          <Button onClick={handleTestSubmit} className="bg-green-600 hover:bg-green-700">
-            🧪 Test Submit (Dev Only)
-          </Button>
-        </div>
-      )}
+      <div className="mb-4 flex justify-center gap-4">
+        <Button onClick={goToOracle} className="bg-indigo-600 hover:bg-indigo-700">
+          🔮 Go straight to the Oracle
+        </Button>
+        {isDev && (
+          <>
+            <Button onClick={testOracleAPI} className="bg-purple-600 hover:bg-purple-700">
+              🔬 Test Oracle API (Dev Only)
+            </Button>
+            <Button onClick={handleTestSubmit} className="bg-green-600 hover:bg-green-700">
+              🧪 Test Submit (Dev Only)
+            </Button>
+          </>
+        )}
+      </div>
       <div className="bg-black/40 backdrop-blur-md rounded shadow-xl h-[92vh] md:h-[85vh] overflow-y-auto scrollbar-hide">
         <div className="p-4 md:p-8 lg:p-12">
           {currentStep === 1 && <Info onNext={nextStep} />}
