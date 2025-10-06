@@ -277,14 +277,20 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
           )}
           
           {birdCategory && !isConsulting && (
-            <div className="bg-blue-500/20 border-2 border-blue-400 rounded-lg p-6 text-center animate-fade-in md:self-stretch">
-              <p className="text-white text-xl font-semibold mb-2">
-                The Metta-Oracle has spoken...
-              </p>
-              <p className="text-blue-200 text-2xl font-bold">
-                You are part of the {birdCategory} family
-              </p>
-            </div>
+            <>
+              <div className="bg-blue-500/20 border-2 border-blue-400 rounded-lg p-6 text-center animate-fade-in md:self-stretch">
+                <p className="text-white text-xl font-semibold mb-2">
+                  The Metta-Oracle has spoken...
+                </p>
+                <p className="text-blue-200 text-2xl font-bold">
+                  You are part of the {birdCategory} family
+                </p>
+              </div>
+              
+              <div className="bg-purple-500/10 border border-purple-400/30 rounded-lg p-4 text-gray-200 text-sm leading-relaxed italic md:self-stretch">
+                The Oracle is all knowing and might have placed you in a family that you didn&apos;t know you were part of deep down in your unconscious. Even if this doesn&apos;t seem like a perfect fit, we&apos;d like to encourage you to embrace the oracle&apos;s wisdom and always remember that you sure as hell will be part of a beautiful flock of birdies
+              </div>
+            </>
           )}
         </div>
       </div>
