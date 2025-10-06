@@ -7,7 +7,7 @@ const DATABASE_ID = '26732652a3f3817b9ba5ca78b8725aca';
 export async function GET() {
   try {
     // Fetch all pages with pagination
-    let allPages = [];
+    const allPages = [];
     let startCursor = undefined;
     let hasMore = true;
 

@@ -48,6 +48,15 @@ type RegistrationData = {
   contribution: {
     contributionAmount: string;
   };
+  oracle?: {
+    question1: string;
+    question2: string;
+    question3: string;
+    question4: string;
+    question5: string;
+    question6: string;
+    birdCategory?: string;
+  };
   birdCategory: BirdType;
 };
 
@@ -204,6 +213,24 @@ export async function POST(request: NextRequest) {
         },
         'Bird Category': {
           select: data.birdCategory ? { name: data.birdCategory } : null,
+        },
+        'Soul Answer': {
+          rich_text: [{ text: { content: data.oracle?.question1 || '' } }],
+        },
+        'Flying Answer': {
+          rich_text: [{ text: { content: data.oracle?.question2 || '' } }],
+        },
+        'Nest Answer': {
+          rich_text: [{ text: { content: data.oracle?.question3 || '' } }],
+        },
+        'Call Group Answer': {
+          rich_text: [{ text: { content: data.oracle?.question4 || '' } }],
+        },
+        'Environment Answer': {
+          rich_text: [{ text: { content: data.oracle?.question5 || '' } }],
+        },
+        'Mating Ritual Answer': {
+          rich_text: [{ text: { content: data.oracle?.question6 || '' } }],
         },
       },
     });

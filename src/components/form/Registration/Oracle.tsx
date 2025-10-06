@@ -1,11 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/Button";
-import { RadioGroup } from "@/components/form/inputs/RadioGroup";
-import { TextInput } from "@/components/form/inputs/TextInput";
-import { oracleSchema, OracleFormData, BirdType } from "./types";
-import { isDev } from "@/lib/constants";
+import { Textarea } from "@/components/form/inputs/Textarea";
+import { oracleSchema, OracleFormData, BirdType, BIRD_VIDEO_MAP } from "./types";
 
 type OracleProps = {
   onNext: (data: OracleFormData) => void;
@@ -22,58 +20,33 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
     setValue,
     getValues,
   } = useForm<OracleFormData>({
-    resolver: isDev ? undefined : zodResolver(oracleSchema),
+    resolver: zodResolver(oracleSchema),
     defaultValues,
   });
 
-  const question1Value = watch("question1");
-  const question2Value = watch("question2");
-  const question3Value = watch("question3");
-  const question4Value = watch("question4");
+  // Preload the bird video once we know the category
+  useEffect(() => {
+    if (birdCategory) {
+      const videoSrc = `/bird-families/${BIRD_VIDEO_MAP[birdCategory]}`;
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'video';
+      link.href = videoSrc;
+      document.head.appendChild(link);
 
-  const question1Options = [
-    { value: "antiquity", label: "Antiquity" },
-    { value: "20th-century", label: "The 20th century" },
-    { value: "prehistory", label: "Prehistory" },
-    { value: "2078", label: "2078" },
-    { value: "tropical-paradise", label: "A tropical paradise" },
-    { value: "other", label: "Other" },
-  ];
-
-  const question2Options = [
-    { value: "paper", label: "Made of paper" },
-    { value: "motor", label: "Equipped with a motor" },
-    { value: "young", label: "Young and energetic" },
-    { value: "mystical", label: "Full of mystical energy" },
-    { value: "aerodynamic", label: "Aerodynamically perfect" },
-    { value: "other", label: "Other" },
-  ];
-
-  const question3Options = [
-    { value: "modern", label: "Modern and functional" },
-    { value: "cozy", label: "Cozy and comfortable" },
-    { value: "auto-hatching", label: "With advanced auto-hatching features" },
-    { value: "shadows", label: "Hidden in the shadows" },
-    { value: "shores", label: "Built on sandy shores" },
-    { value: "other", label: "Other" },
-  ];
-
-  const question4Options = [
-    { value: "scream", label: "Scream" },
-    { value: "vibrate", label: "Vibrate at 8000 hertz" },
-    { value: "lightning", label: "Trigger some lightning in the sky" },
-    { value: "6g", label: "Use 6G connection" },
-    { value: "melodious", label: "Sing a melodious tune" },
-    { value: "other", label: "Other" },
-  ];
+      // Cleanup
+      return () => {
+        document.head.removeChild(link);
+      };
+    }
+  }, [birdCategory]);
 
   const consultOracle = async () => {
-    // In non-dev mode, only allow consulting once
-    if (!isDev && hasConsulted) {
+    // Only allow consulting once
+    if (hasConsulted) {
       alert("The Metta-Oracle has already spoken. Your destiny has been revealed!");
       return;
     }
@@ -81,26 +54,8 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
     const values = getValues();
     
     // Check if all questions are answered
-    if (!values.question1 || !values.question2 || !values.question3 || !values.question4) {
+    if (!values.question1 || !values.question2 || !values.question3 || !values.question4 || !values.question5 || !values.question6) {
       alert("Please answer all questions before consulting the Metta-Oracle");
-      return;
-    }
-
-    // Check if "other" is selected, that the text field is filled
-    if (values.question1 === "other" && (!values.question1Other || values.question1Other.trim() === "")) {
-      alert("Please specify your answer for question 1");
-      return;
-    }
-    if (values.question2 === "other" && (!values.question2Other || values.question2Other.trim() === "")) {
-      alert("Please specify your answer for question 2");
-      return;
-    }
-    if (values.question3 === "other" && (!values.question3Other || values.question3Other.trim() === "")) {
-      alert("Please specify your answer for question 3");
-      return;
-    }
-    if (values.question4 === "other" && (!values.question4Other || values.question4Other.trim() === "")) {
-      alert("Please specify your answer for question 4");
       return;
     }
 
@@ -114,13 +69,11 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
         },
         body: JSON.stringify({
           question1: values.question1,
-          question1Other: values.question1Other,
           question2: values.question2,
-          question2Other: values.question2Other,
           question3: values.question3,
-          question3Other: values.question3Other,
           question4: values.question4,
-          question4Other: values.question4Other,
+          question5: values.question5,
+          question6: values.question6,
         }),
       });
 
@@ -154,119 +107,67 @@ export function Oracle({ onNext, onPrev, defaultValues }: OracleProps) {
       <div>
         <h2 className="text-3xl font-bold text-white mb-4">Consult the Metta-Oracle</h2>
         <p className="text-gray-200">
-          Answer these questions to discover your spirit bird for this journey.
+          The Metta-Oracle needs to know a few things about you
         </p>
       </div>
 
       <div className="flex flex-col gap-6">
-        <div>
-          <RadioGroup
-            label="Your soul is definitely from"
-            name="question1"
-            options={question1Options}
-            required
-            value={question1Value}
-            onChange={(value) => setValue("question1", value)}
-            error={errors.question1?.message}
-          />
-          <div className="mt-2 md:max-w-md">
-            <TextInput
-              label="If other, please specify"
-              placeholder="Your answer..."
-              {...register("question1Other")}
-              onChange={(e) => {
-                if (e.target.value && question1Value !== "other") {
-                  setValue("question1", "other");
-                }
-              }}
-              error={errors.question1Other?.message}
-            />
-          </div>
-        </div>
+        <Textarea
+          label="When did your soul appear on this planet?"
+          placeholder="Share your answer..."
+          required
+          {...register("question1")}
+          error={errors.question1?.message}
+        />
 
-        <div>
-          <RadioGroup
-            label="For good flying, it's best to be"
-            name="question2"
-            options={question2Options}
-            required
-            value={question2Value}
-            onChange={(value) => setValue("question2", value)}
-            error={errors.question2?.message}
-          />
-          <div className="mt-2 md:max-w-md">
-            <TextInput
-              label="If other, please specify"
-              placeholder="Your answer..."
-              {...register("question2Other")}
-              onChange={(e) => {
-                if (e.target.value && question2Value !== "other") {
-                  setValue("question2", "other");
-                }
-              }}
-              error={errors.question2Other?.message}
-            />
-          </div>
-        </div>
+        <Textarea
+          label="What makes for good flying?"
+          placeholder="Share your answer..."
+          required
+          {...register("question2")}
+          error={errors.question2?.message}
+        />
 
-        <div>
-          <RadioGroup
-            label="A good nest is"
-            name="question3"
-            options={question3Options}
-            required
-            value={question3Value}
-            onChange={(value) => setValue("question3", value)}
-            error={errors.question3?.message}
-          />
-          <div className="mt-2 md:max-w-md">
-            <TextInput
-              label="If other, please specify"
-              placeholder="Your answer..."
-              {...register("question3Other")}
-              onChange={(e) => {
-                if (e.target.value && question3Value !== "other") {
-                  setValue("question3", "other");
-                }
-              }}
-              error={errors.question3Other?.message}
-            />
-          </div>
-        </div>
+        <Textarea
+          label="Describe your ideal nest"
+          placeholder="Share your answer..."
+          required
+          {...register("question3")}
+          error={errors.question3?.message}
+        />
 
-        <div>
-          <RadioGroup
-            label="To call your flock, you"
-            name="question4"
-            options={question4Options}
-            required
-            value={question4Value}
-            onChange={(value) => setValue("question4", value)}
-            error={errors.question4?.message}
-          />
-          <div className="mt-2 md:max-w-md">
-            <TextInput
-              label="If other, please specify"
-              placeholder="Your answer..."
-              {...register("question4Other")}
-              onChange={(e) => {
-                if (e.target.value && question4Value !== "other") {
-                  setValue("question4", "other");
-                }
-              }}
-              error={errors.question4Other?.message}
-            />
-          </div>
-        </div>
+        <Textarea
+          label="You just lost your group, how do you call them back?"
+          placeholder="Share your answer..."
+          required
+          {...register("question4")}
+          error={errors.question4?.message}
+        />
+
+        <Textarea
+          label="In what kind of environment do you flourish the most?"
+          placeholder="Share your answer..."
+          required
+          {...register("question5")}
+          error={errors.question5?.message}
+        />
+
+        <Textarea
+          label="Tell me about your mating ritual"
+          placeholder="Share your answer..."
+          required
+          {...register("question6")}
+          error={errors.question6?.message}
+        />
 
         <div className="flex flex-col items-center md:items-end gap-4 py-4">
           <Button
             type="button"
             onClick={consultOracle}
-            disabled={isConsulting || (!isDev && hasConsulted)}
+            disabled={isConsulting || hasConsulted}
             className="min-w-[250px]"
           >
-            {isConsulting ? "Consulting..." : hasConsulted && !isDev ? "Oracle Consulted" : "Consult the Metta-Oracle"}
+            {isConsulting ? "Consulting..." : hasConsulted ? "Oracle Consulted" : "Consult the Metta-Oracle"}
           </Button>
           
           {isConsulting && (

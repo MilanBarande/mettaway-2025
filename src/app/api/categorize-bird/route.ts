@@ -1,30 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { BIRD_CATEGORIES } from '@/components/form/Registration/types';
 
 type OracleRequest = {
   question1: string;
-  question1Other?: string;
   question2: string;
-  question2Other?: string;
   question3: string;
-  question3Other?: string;
   question4: string;
-  question4Other?: string;
+  question5: string;
+  question6: string;
 };
 
-const BIRD_CATEGORIES = [
-  "Birds of Paradise",
-  "Origami Birds",
-  "Walking Birds",
-  "Ocean Birds",
-  "Dinosaur Birds",
-  "Cartoon Birds",
-  "Chicks",
-  "Mecha Birds",
-  "Night Birds",
-  "Dark Birds",
-  "Mythological Birds",
-  "Birds of Prey",
-] as const;
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,10 +17,12 @@ export async function POST(request: NextRequest) {
 
     // Format answers for the prompt
     const answers = [
-      `Question 1: ${data.question1}${data.question1 === 'other' && data.question1Other ? ` (${data.question1Other})` : ''}`,
-      `Question 2: ${data.question2}${data.question2 === 'other' && data.question2Other ? ` (${data.question2Other})` : ''}`,
-      `Question 3: ${data.question3}${data.question3 === 'other' && data.question3Other ? ` (${data.question3Other})` : ''}`,
-      `Question 4: ${data.question4}${data.question4 === 'other' && data.question4Other ? ` (${data.question4Other})` : ''}`,
+      `Question 1: ${data.question1}`,
+      `Question 2: ${data.question2}`,
+      `Question 3: ${data.question3}`,
+      `Question 4: ${data.question4}`,
+      `Question 5: ${data.question5}`,
+      `Question 6: ${data.question6}`,
     ].join('\n');
 
     // Prepare the prompt for Mistral
@@ -45,10 +32,12 @@ Categorize this person based on their answers to the following questions into on
 ${BIRD_CATEGORIES.map((cat, i) => `${i + 1}. ${cat}`).join('\n')}
 
 Context about the questions:
-- Question 1: "Your soul is definitely from" - reveals their connection to different eras and realms
-- Question 2: "For good flying, it's best to be" - shows their essence and way of being
-- Question 3: "A good nest is" - indicates their comfort zone and lifestyle
-- Question 4: "To call your flock, you" - demonstrates how they connect with others
+- Question 1: "When did your soul appear on this planet?" - reveals their temporal/historical connection
+- Question 2: "What makes for good flying?" - shows their essence and approach to life
+- Question 3: "Describe your ideal nest" - indicates their comfort zone and lifestyle preferences
+- Question 4: "You just lost your group, how do you call them back?" - demonstrates how they connect with others
+- Question 5: "In what kind of environment do you flourish the most?" - shows their ideal habitat and conditions
+- Question 6: "Tell me about your mating ritual" - reveals their approach to connection and attraction
 
 Their answers:
 ${answers}
@@ -56,17 +45,17 @@ ${answers}
 Based on their personality traits, temporal origins, and spiritual essence revealed through these answers, which bird category best represents them?
 
 Consider:
-- Mythological Birds: ancient, mystical, legendary
+- Mythical Birds: ancient, mystical, legendary
 - Mecha Birds: futuristic, technological, mechanical
-- Origami Birds: delicate, crafted, paper-like
+- Folded Birds: delicate, crafted, paper-like
 - Night Birds / Dark Birds: nocturnal, mysterious, shadowy
 - Ocean Birds: coastal, water-loving, shore-dwelling
 - Birds of Paradise: tropical, exotic, vibrant
-- Cartoon Birds: playful, 20th century, animated
+- Digital Birds: playful, modern, animated, electronic
 - Chicks: young, fresh, energetic
 - Birds of Prey: powerful, precise, aerodynamic
 - Walking Birds: grounded, functional, terrestrial
-- Dinosaur Birds: prehistoric, ancient, primal
+- Ancient Birds: prehistoric, ancient, primal
 
 Respond with ONLY the exact bird category name from the list above, nothing else.`;
 

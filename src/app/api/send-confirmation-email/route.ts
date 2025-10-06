@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
     `;
 
     const { data: emailData, error } = await resend.emails.send({
-      from: 'Mettaway <onboarding@resend.dev>', // Use resend.dev for testing, later replace with your verified domain
+      from: 'Mettaway <info@mettaway.voyage>',
       to: [data.email],
       replyTo: PAYMENT_INFO.contactEmail,
       subject: '🐦 Welcome to Mettaway 2025 - Payment Information',

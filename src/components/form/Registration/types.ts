@@ -3,20 +3,36 @@ import { z } from "zod";
 // Bird categories
 export const BIRD_CATEGORIES = [
   "Birds of Paradise",
-  "Origami Birds",
+  "Folded Birds",
   "Walking Birds",
   "Ocean Birds",
-  "Dinosaur Birds",
-  "Cartoon Birds",
+  "Ancient Birds",
+  "Digital Birds",
   "Chicks",
   "Mecha Birds",
   "Night Birds",
   "Dark Birds",
-  "Mythological Birds",
+  "Mythical Birds",
   "Birds of Prey",
 ] as const;
 
 export type BirdType = typeof BIRD_CATEGORIES[number];
+
+// Map bird categories to video filenames
+export const BIRD_VIDEO_MAP: Record<BirdType, string> = {
+  "Birds of Paradise": "Birds of Paradise.mp4",
+  "Folded Birds": "Folded Birds.mp4",
+  "Walking Birds": "Walking Birds.mp4",
+  "Ocean Birds": "Birds of the seas.mp4",
+  "Ancient Birds": "Ancient Birds.mp4",
+  "Digital Birds": "Digital Birds.mp4",
+  "Chicks": "Chicks.mp4",
+  "Mecha Birds": "Mecha Birds.mp4",
+  "Night Birds": "Night Birds.mp4",
+  "Dark Birds": "Dark Birds.mp4",
+  "Mythical Birds": "Mythical Birds.mp4",
+  "Birds of Prey": "Birds of Prey.mp4",
+};
 
 // Step 2 (Identity) validation schema
 export const identitySchema = z.object({
@@ -70,47 +86,25 @@ export type WorkshopsMusicFormData = z.infer<typeof workshopsMusicSchema>;
 
 // Step 5 (Oracle) validation schema
 export const oracleSchema = z.object({
-  question1: z.string().min(1, "Please answer this question"),
-  question1Other: z.string().optional(),
-  question2: z.string().min(1, "Please answer this question"),
-  question2Other: z.string().optional(),
-  question3: z.string().min(1, "Please answer this question"),
-  question3Other: z.string().optional(),
-  question4: z.string().min(1, "Please answer this question"),
-  question4Other: z.string().optional(),
+  question1: z.string()
+    .min(20, "Please provide at least 20 characters")
+    .max(200, "Please keep your answer under 200 characters"),
+  question2: z.string()
+    .min(20, "Please provide at least 20 characters")
+    .max(200, "Please keep your answer under 200 characters"),
+  question3: z.string()
+    .min(20, "Please provide at least 20 characters")
+    .max(200, "Please keep your answer under 200 characters"),
+  question4: z.string()
+    .min(20, "Please provide at least 20 characters")
+    .max(200, "Please keep your answer under 200 characters"),
+  question5: z.string()
+    .min(20, "Please provide at least 20 characters")
+    .max(200, "Please keep your answer under 200 characters"),
+  question6: z.string()
+    .min(20, "Please provide at least 20 characters")
+    .max(200, "Please keep your answer under 200 characters"),
   birdCategory: z.string().optional(),
-}).refine((data) => {
-  if (data.question1 === "other" && (!data.question1Other || data.question1Other.trim() === "")) {
-    return false;
-  }
-  return true;
-}, {
-  message: "Please specify your answer",
-  path: ["question1Other"],
-}).refine((data) => {
-  if (data.question2 === "other" && (!data.question2Other || data.question2Other.trim() === "")) {
-    return false;
-  }
-  return true;
-}, {
-  message: "Please specify your answer",
-  path: ["question2Other"],
-}).refine((data) => {
-  if (data.question3 === "other" && (!data.question3Other || data.question3Other.trim() === "")) {
-    return false;
-  }
-  return true;
-}, {
-  message: "Please specify your answer",
-  path: ["question3Other"],
-}).refine((data) => {
-  if (data.question4 === "other" && (!data.question4Other || data.question4Other.trim() === "")) {
-    return false;
-  }
-  return true;
-}, {
-  message: "Please specify your answer",
-  path: ["question4Other"],
 });
 
 export type OracleFormData = z.infer<typeof oracleSchema>;
@@ -127,6 +121,7 @@ export type RegistrationData = {
   identity?: IdentityFormData;
   logistics?: LogisticsFormData;
   workshopsMusic?: WorkshopsMusicFormData;
+  oracle?: OracleFormData;
   contribution?: ContributionFormData;
   birdCategory?: BirdType;
 };
