@@ -32,17 +32,17 @@ export async function POST(request: NextRequest) {
         <body>
           <div class="container">
             <div class="header">
-              <h1>🐦 Welcome to the Ventara Adventure!</h1>
+              <h1>🐦 Welcome Winged-One to Ventara!</h1>
             </div>
             <div class="content">
               <h2>Hi ${data.firstName}! 🎉</h2>
-              
-              <p>Thank you for registering for Mettaway 2025! We're so excited to have you join us.</p>
-              
+
+              <p>Thank you for registering for <strong>Ventara,</strong> the Mettaway Voyage <strong>#7</strong> 2025! We're so excited to have you join us.</p>
+
               <p><strong>Your submission ID:</strong> ${data.submissionId}</p>
-              
+
               <h3>Next Step: Payment</h3>
-              <p>With the completion of this form, your seat is temporarily reserved. Only once you've paid the travel fee, your seat will be unconditionally reserved for you.</p>
+              <p>With the completion of this form, your nest-spot is temporarily reserved. Only once you've paid the travel fee, your spot will be unconditionally reserved for you.</p>
               
               <p>Money transfers can be made in the following ways:</p>
               
@@ -71,10 +71,12 @@ export async function POST(request: NextRequest) {
                 <li>Complete your payment</li>
                 <li>Keep an eye on your email for updates</li>
               </ul>
-              
+
               <p>If you have any questions or if the financial contribution prohibits you from participating, please reach out to us at <a href="mailto:${PAYMENT_INFO.contactEmail}" style="color: #667eea; text-decoration: underline;">${PAYMENT_INFO.contactEmail}</a> - we are your friends!</p>
-              
-              <p>See you soon! 🌟</p>
+
+              <p>From our nest to yours, with love and kindness, we'll see you soon🌟</p>
+
+              <strong>The Flocks of Ventara</strong>
                             
               <div class="footer">
                 <p>This email was sent to ${data.email}</p>
@@ -90,7 +92,7 @@ export async function POST(request: NextRequest) {
       from: 'Mettaway <info@mettaway.voyage>',
       to: [data.email],
       replyTo: PAYMENT_INFO.contactEmail,
-      subject: '🐦 Welcome to Mettaway 2025 - Payment Information',
+      subject: '🐦 Welcome Winged-One to Ventara!',
       html: emailHtml,
     });
 
