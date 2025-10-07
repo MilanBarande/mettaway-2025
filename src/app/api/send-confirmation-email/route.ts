@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-// @ts-ignore - nodemailer types issue
 import nodemailer from 'nodemailer';
 import { PAYMENT_INFO } from '@/lib/constants';
 

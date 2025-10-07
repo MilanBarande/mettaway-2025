@@ -12,6 +12,14 @@ type OracleRequest = {
   question6: string;
 };
 
+type NotionPropertyValue = {
+  type: string;
+  select?: { name: string };
+  [key: string]: unknown;
+};
+
+type NotionPageProperties = Record<string, NotionPropertyValue>;
+
 const notion = new Client({ auth: process.env.NOTION_INTEGRATION_SECRET });
 
 // Function to fetch bird category counts from Notion
@@ -61,7 +69,7 @@ async function getBirdCategoryCounts(): Promise<Record<string, number>> {
     // Count bird categories
     registrations.forEach((page) => {
       if ('properties' in page && page.properties) {
-        const properties = page.properties as Record<string, any>;
+        const properties = page.properties as NotionPageProperties;
 
         // Find the Bird Category property by name
         const birdCategoryProp = properties['Bird Category'];

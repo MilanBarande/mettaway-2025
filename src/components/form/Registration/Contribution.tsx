@@ -28,7 +28,7 @@ export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionPr
   const contributionAmountValue = watch("contributionAmount");
 
   const copyIban = () => {
-    navigator.clipboard.writeText(PAYMENT_INFO.iban.replace(/\s/g, ""));
+    navigator.clipboard.writeText(PAYMENT_INFO.iban?.replace(/\s/g, "") || "");
     setIbanCopied(true);
     setTimeout(() => setIbanCopied(false), 2000);
   };
