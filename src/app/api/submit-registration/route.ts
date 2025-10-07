@@ -235,8 +235,8 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Send confirmation email (only if Resend API key is configured)
-    if (process.env.RESEND_API_KEY) {
+    // Send confirmation email (only if Gmail credentials are configured)
+    if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
       try {
         const emailResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/send-confirmation-email`, {
           method: 'POST',
@@ -250,7 +250,7 @@ export async function POST(request: NextRequest) {
             submissionId,
           }),
         });
-        
+
         if (!emailResponse.ok) {
           console.error('Failed to send confirmation email, but registration succeeded');
         }
@@ -259,7 +259,7 @@ export async function POST(request: NextRequest) {
         // Don't fail the registration if email fails
       }
     } else {
-      console.log('Skipping email - RESEND_API_KEY not configured');
+      console.log('Skipping email - Gmail credentials not configured (GMAIL_USER or GMAIL_APP_PASSWORD missing)');
     }
 
     return NextResponse.json({

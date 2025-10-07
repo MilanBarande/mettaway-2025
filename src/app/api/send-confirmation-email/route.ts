@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Resend } from 'resend';
+// @ts-ignore - nodemailer types issue
+import nodemailer from 'nodemailer';
 import { PAYMENT_INFO } from '@/lib/constants';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 type EmailData = {
   firstName: string;
@@ -15,6 +14,15 @@ export async function POST(request: NextRequest) {
   try {
     const data: EmailData = await request.json();
 
+    // Create nodemailer transporter for Gmail
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD, // Use App Password, not regular password
+      },
+    });
+
     const emailHtml = `
       <!DOCTYPE html>
       <html>
@@ -22,7 +30,7 @@ export async function POST(request: NextRequest) {
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: black; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
             .button { display: inline-block; padding: 12px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
             .payment-info { background: white; padding: 20px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #667eea; }
@@ -88,26 +96,26 @@ export async function POST(request: NextRequest) {
       </html>
     `;
 
-    const { data: emailData, error } = await resend.emails.send({
-      from: 'Mettaway <info@mettaway.voyage>',
-      to: [data.email],
-      replyTo: PAYMENT_INFO.contactEmail,
-      subject: '🐦 Welcome Winged-One to Ventara!',
-      html: emailHtml,
-    });
+    try {
+      const info = await transporter.sendMail({
+        from: `Mettaway <${process.env.GMAIL_USER}>`,
+        to: data.email,
+        replyTo: PAYMENT_INFO.contactEmail,
+        subject: '🐦 Welcome Winged-One to Ventara!',
+        html: emailHtml,
+      });
 
-    if (error) {
-      console.error('Error sending email:', error);
+      return NextResponse.json({
+        success: true,
+        emailId: info.messageId,
+      });
+    } catch (emailError) {
+      console.error('Error sending email:', emailError);
       return NextResponse.json(
         { success: false, error: 'Failed to send email' },
         { status: 500 }
       );
     }
-
-    return NextResponse.json({
-      success: true,
-      emailId: emailData?.id,
-    });
   } catch (error) {
     console.error('Error in email route:', error);
     return NextResponse.json(
