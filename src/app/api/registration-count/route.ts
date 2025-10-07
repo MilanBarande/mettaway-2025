@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { Client } from '@notionhq/client';
+import { NOTION_DATABASE_ID } from '@/lib/constants';
 
 const notion = new Client({ auth: process.env.NOTION_INTEGRATION_SECRET });
-const DATABASE_ID = '26732652a3f3817b9ba5ca78b8725aca';
 
 export async function GET() {
   try {
@@ -32,7 +32,7 @@ export async function GET() {
       if (!parent.database_id) return false;
       
       const cleanDbId = parent.database_id.replace(/-/g, '');
-      if (cleanDbId !== DATABASE_ID) return false;
+      if (cleanDbId !== NOTION_DATABASE_ID) return false;
 
       // Exclude template pages (empty title)
       if ('properties' in page && page.properties) {

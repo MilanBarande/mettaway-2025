@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { BIRD_CATEGORIES } from '@/components/form/Registration/types';
+import { Client } from '@notionhq/client';
+import { NOTION_DATABASE_ID } from '@/lib/constants';
 
 type OracleRequest = {
   question1: string;
@@ -10,10 +12,81 @@ type OracleRequest = {
   question6: string;
 };
 
+const notion = new Client({ auth: process.env.NOTION_INTEGRATION_SECRET });
+
+// Function to fetch bird category counts from Notion
+async function getBirdCategoryCounts(): Promise<Record<string, number>> {
+  try {
+    const allPages = [];
+    let startCursor = undefined;
+    let hasMore = true;
+
+    while (hasMore) {
+      const response = await notion.search({
+        filter: { property: 'object', value: 'page' },
+        page_size: 100,
+        start_cursor: startCursor,
+      });
+
+      allPages.push(...response.results);
+      hasMore = response.has_more;
+      startCursor = response.next_cursor ?? undefined;
+    }
+
+    // Filter for our database pages and extract bird categories
+    const categoryCounts: Record<string, number> = {};
+
+    const registrations = allPages.filter((page) => {
+      if (!('parent' in page) || !page.parent) return false;
+
+      const parent = page.parent as { database_id?: string };
+      if (!parent.database_id) return false;
+
+      const cleanDbId = parent.database_id.replace(/-/g, '');
+      if (cleanDbId !== NOTION_DATABASE_ID) return false;
+
+      // Exclude template pages (empty title)
+      if ('properties' in page && page.properties) {
+        const titleProp = Object.values(page.properties as Record<string, { type: string; title?: Array<unknown> }>)
+          .find(prop => prop.type === 'title');
+
+        if (titleProp && (!titleProp.title || titleProp.title.length === 0)) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    // Count bird categories
+    registrations.forEach((page) => {
+      if ('properties' in page && page.properties) {
+        const properties = page.properties as Record<string, any>;
+
+        // Find the Bird Category property by name
+        const birdCategoryProp = properties['Bird Category'];
+
+        if (birdCategoryProp?.type === 'select' && birdCategoryProp?.select?.name) {
+          const category = birdCategoryProp.select.name;
+          categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+        }
+      }
+    });
+
+    return categoryCounts;
+  } catch (error) {
+    console.error('Error fetching bird category counts:', error);
+    return {};
+  }
+}
+
 
 export async function POST(request: NextRequest) {
   try {
     const data: OracleRequest = await request.json();
+
+    // Fetch current bird category counts from Notion
+    const categoryCounts = await getBirdCategoryCounts();
 
     // Format answers for the prompt
     const answers = [
@@ -31,6 +104,11 @@ export async function POST(request: NextRequest) {
 Categorize this person based on their answers to the following questions into one of these 12 bird categories:
 ${BIRD_CATEGORIES.map((cat, i) => `${i + 1}. ${cat}`).join('\n')}
 
+Current distribution of participants across categories:
+${BIRD_CATEGORIES.map(cat => `${cat}: ${categoryCounts[cat] || 0} participants`).join('\n')}
+
+IMPORTANT: We need to maintain balanced category sizes for optimal group dynamics. Each category should ideally have 11-12 members maximum (target total: ~140 participants). Consider the current distribution when making your categorization - if a category is already close to capacity, choose a less populated alternative that still fits the person's personality traits.
+
 Context about the questions:
 - Question 1: "When did your soul appear on this planet?" - reveals their temporal/historical connection
 - Question 2: "What makes for good flying?" - shows their essence and approach to life
@@ -42,9 +120,9 @@ Context about the questions:
 Their answers:
 ${answers}
 
-Based on their personality traits, temporal origins, and spiritual essence revealed through these answers, which bird category best represents them?
+Based on their personality traits, temporal origins, and spiritual essence revealed through these answers, which bird category best represents them? Remember to consider the current distribution and balance the categories appropriately.
 
-Consider:
+Category characteristics to consider:
 - Mythical Birds: ancient, mystical, legendary
 - Mecha Birds: futuristic, technological, mechanical
 - Folded Birds: delicate, crafted, paper-like
@@ -58,7 +136,6 @@ Consider:
 - Ancient Birds: prehistoric, ancient, primal
 
 Respond with ONLY the exact bird category name from the list above, nothing else.`;
-
     // Call Mistral API
     const mistralResponse = await fetch('https://api.mistral.ai/v1/chat/completions', {
       method: 'POST',

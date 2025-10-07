@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client } from '@notionhq/client';
+import { NOTION_DATABASE_ID } from '@/lib/constants';
 import { randomUUID } from 'crypto';
 import { BirdType } from '@/components/form/Registration/types';
 
 const notion = new Client({ auth: process.env.NOTION_INTEGRATION_SECRET });
-const DATABASE_ID = '26732652a3f3817b9ba5ca78b8725aca';
 
 type RegistrationData = {
   identity: {
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       if (!parent.database_id) return false;
       
       const cleanDbId = parent.database_id.replace(/-/g, '');
-      if (cleanDbId !== DATABASE_ID) return false;
+      if (cleanDbId !== NOTION_DATABASE_ID) return false;
 
       // Check if email matches
       if ('properties' in page && page.properties) {
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
 
     // Create Notion page
     const response = await notion.pages.create({
-      parent: { database_id: DATABASE_ID },
+      parent: { database_id: NOTION_DATABASE_ID as string },
       properties: {
         'Submission ID': {
           title: [{ text: { content: submissionId } }],

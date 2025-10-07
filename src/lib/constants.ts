@@ -1,17 +1,20 @@
 export const isDev = process.env.NODE_ENV === "development";
 
+// Notion Database
+export const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID;
+
 // Payment Information
 export const PAYMENT_INFO = {
-  iban: "CH77 0078 7007 7169 1140 9",
+  iban: process.env.PAYMENT_IBAN,
   accountHolder: "appricot GmbH",
   address: "Industriestrasse 70, 6300 Zug, Switzerland",
   revolut: {
     name: "Lukas Hotz",
-    phone: "+41 79 288 68 53",
+    phone: process.env.PAYMENT_PHONE,
   },
   twint: {
     link: "https://go.twint.ch/1/e/tw?tw=acq.N_syTGB2S22l8iFj2bOfdrVCi15qZNvseICaSQyvpc0ZmjpIn1MPE6CKOzOenu7T.",
   },
-  contactEmail: "hotzluc@pm.me",
+  contactEmail: process.env.CONTACT_EMAIL,
 } as const;
 
