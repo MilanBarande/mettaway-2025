@@ -81,10 +81,10 @@ export function OracleQuestions({
     >
       <div>
         <h2 className="text-3xl font-bold text-white mb-4">
-          Consult the Metta-Oracle
+          Consult the Metta-Oracle 
         </h2>
         <p className="text-gray-200">
-          The Metta-Oracle needs to know a few things about you...
+          First of all, the Metta-Oracle needs to know a few things about you...
         </p>
       </div>
 
