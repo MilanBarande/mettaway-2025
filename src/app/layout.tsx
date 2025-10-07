@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ErrorModalProvider } from "@/contexts/ErrorModalContext";
+import { ErrorModalInitializer } from "@/components/ErrorModalInitializer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +28,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ErrorModalProvider>
+          <ErrorModalInitializer />
+          {children}
+        </ErrorModalProvider>
       </body>
     </html>
   );

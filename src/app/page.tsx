@@ -1,35 +1,81 @@
 "use client";
 
 import { Birds } from "@/components/Birds";
-import { Button } from "@/components/Button";
 import { PasswordForm } from "@/components/form/PasswordForm";
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default function Home() {
+function HomeContent() {
   const [count, setCount] = useState(0);
+  const [isLoadingCount, setIsLoadingCount] = useState(true);
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const searchParams = useSearchParams();
   
-  const addBird = () => {
-    if (count < 140) {
-      setCount(count + 1);
+  useEffect(() => {
+    const fetchRegistrationCount = async () => {
+      setIsLoadingCount(true);
+      try {
+        const response = await fetch('/api/registration-count');
+        const data = await response.json();
+        if (data.success) {
+          setCount(Math.min(data.count, 140));
+        }
+      } catch (error) {
+        console.error('Network error fetching registration count:', error);
+      } finally {
+        setIsLoadingCount(false);
+      }
+    };
+    
+    // Fetch count on initial load
+    fetchRegistrationCount();
+    
+    // Check if redirected from successful registration
+    if (searchParams.get('registered') === 'true') {
+      // Fetch updated count after registration
+      fetchRegistrationCount();
+      // Clean up URL
+      window.history.replaceState({}, '', '/');
     }
-  };
+  }, [searchParams]);
   
   return (
-    <div className="font-sans flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+    <main className="font-sans flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <Birds count={count} />
       
-      {/* Password Form */}
+      {/* Password Form / Loading */}
       <div className="flex flex-col items-center gap-6">
-        <PasswordForm />
-
-        {/* Birds */}
-        <div className="flex flex-col items-center gap-2 mt-8">
-          <Button onClick={addBird} disabled={count >= 140}>Add Bird</Button>
-          <p className="text-sm text-white px-4 py-2 rounded-lg backdrop-blur-md bg-black/30 text-center">
-            {count} {count === 1 ? 'bird' : 'birds'} ready to fly, {140 - count} {140 - count === 1 ? 'place' : 'places'} left in the nest
-          </p>
-        </div>
+        {isRedirecting ? (
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+            <p className="text-white text-lg">Redirecting to registration...</p>
+          </div>
+        ) : isLoadingCount ? (
+          <div className="flex items-center justify-center px-4 py-2 rounded-lg backdrop-blur-md bg-black/30">
+            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          </div>
+        ) : (
+          <>
+            <p className="text-sm text-white px-4 py-2 rounded-lg backdrop-blur-md bg-black/30 text-center">
+              {count} {count === 1 ? 'bird' : 'birds'} ready to fly, {140 - count} {140 - count === 1 ? 'place' : 'places'} left in the nest
+            </p>
+            
+            <PasswordForm onRedirecting={setIsRedirecting} />
+          </>
+        )}
       </div>
-    </div>
+    </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <main className="font-sans flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+        <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+      </main>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }
