@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { PAYMENT_INFO } from '@/lib/constants';
+import { BirdType, BIRD_VIDEO_MAP } from '@/components/form/Registration/types';
 
 type EmailData = {
   firstName: string;
   lastName: string;
   email: string;
   submissionId: string;
+  birdCategory?: BirdType;
 };
 
 export async function POST(request: NextRequest) {
@@ -44,9 +46,15 @@ export async function POST(request: NextRequest) {
             <div class="content">
               <h2>Hi ${data.firstName}! 🎉</h2>
 
-              <p>Thank you for registering for <strong>Ventara,</strong> the Mettaway Voyage <strong>#7</strong> 2025! We're so excited to have you join us.</p>
+              <p>Thank you for registering for <strong>Ventara,</strong> the Mettaway Voyage <strong>#7</strong>! We're so excited to have you join us.</p>
 
-              <p><strong>Your submission ID:</strong> ${data.submissionId}</p>
+              ${data.birdCategory ? `
+              <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: black; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center;">
+                <h3 style="margin: 0 0 10px 0;">🐦 Your Bird Family</h3>
+                <p style="font-size: 18px; font-weight: bold; margin: 0;">You are part of the <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/bird-families/${BIRD_VIDEO_MAP[data.birdCategory]}" style="color: black; text-decoration: underline; font-weight: bold;"><strong>${data.birdCategory}</strong> family!</a></p>
+                <p style="margin: 10px 0 0 0; font-style: italic;">The Metta-Oracle has revealed your true nature. Embrace your flock! 🌟</p>
+              </div>
+              ` : ''}
 
               <h3>Next Step: Payment</h3>
               <p>With the completion of this form, your nest-spot is temporarily reserved. Only once you've paid the travel fee, your spot will be unconditionally reserved for you.</p>

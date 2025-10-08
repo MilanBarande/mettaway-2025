@@ -248,6 +248,7 @@ export async function POST(request: NextRequest) {
             lastName: data.identity.lastName,
             email: data.identity.email,
             submissionId,
+            birdCategory: data.birdCategory,
           }),
         });
 
