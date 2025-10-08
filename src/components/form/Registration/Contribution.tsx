@@ -10,9 +10,10 @@ type ContributionProps = {
   onSubmit: (data: ContributionFormData) => void;
   onPrev: () => void;
   defaultValues?: Partial<ContributionFormData>;
+  isSubmitting?: boolean;
 };
 
-export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionProps) {
+export function Contribution({ onSubmit, onPrev, defaultValues, isSubmitting = false }: ContributionProps) {
   const [ibanCopied, setIbanCopied] = useState(false);
 
   const {
@@ -165,8 +166,8 @@ export function Contribution({ onSubmit, onPrev, defaultValues }: ContributionPr
         <Button variant="secondary" type="button" onClick={onPrev}>
           Back
         </Button>
-        <Button type="submit">
-          Continue
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Continue'}
         </Button>
       </div>
     </form>

@@ -69,12 +69,9 @@ export function RegistrationForm() {
     nextStep();
   };
 
-  const handleContributionSubmit = (data: ContributionFormData) => {
+  const handleContributionSubmit = async (data: ContributionFormData) => {
     setFormData({ ...formData, contribution: data });
-    nextStep();
-  };
 
-  const handleFinalSubmit = async () => {
     if (isSubmitting) return; // Prevent double submission
 
     setIsSubmitting(true);
@@ -96,8 +93,8 @@ export function RegistrationForm() {
           result.submissionId
         );
         console.log("Notion page created:", result.notionPageId);
-        // Redirect to homepage with success indicator
-        window.location.href = "/?registered=true";
+        // Go to step 7 to show the oracle result
+        nextStep();
       } else {
         alert(
           `Error submitting registration: ${result.details || result.error}`
@@ -110,6 +107,11 @@ export function RegistrationForm() {
       console.error("Network error:", error);
       setIsSubmitting(false);
     }
+  };
+
+
+  const handleBackToHome = () => {
+    window.location.href = "/?registered=true";
   };
 
   const handleTestSubmit = async () => {
@@ -285,14 +287,13 @@ export function RegistrationForm() {
               onSubmit={handleContributionSubmit}
               onPrev={prevStep}
               defaultValues={formData.contribution}
+              isSubmitting={isSubmitting}
             />
           )}
           {currentStep === 7 && formData.birdCategory && (
             <OracleResult
               birdCategory={formData.birdCategory}
-              onSubmit={handleFinalSubmit}
-              onPrev={prevStep}
-              isSubmitting={isSubmitting}
+              onBackToHome={handleBackToHome}
             />
           )}
         </div>

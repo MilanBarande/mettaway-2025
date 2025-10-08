@@ -3,12 +3,10 @@ import { BirdType, BIRD_VIDEO_MAP } from "./types";
 
 type OracleResultProps = {
   birdCategory: BirdType;
-  onSubmit: () => void;
-  onPrev: () => void;
-  isSubmitting: boolean;
+  onBackToHome: () => void;
 };
 
-export function OracleResult({ birdCategory, onSubmit, onPrev, isSubmitting }: OracleResultProps) {
+export function OracleResult({ birdCategory, onBackToHome }: OracleResultProps) {
   const videoSrc = `/bird-families/${BIRD_VIDEO_MAP[birdCategory]}`;
 
   return (
@@ -47,12 +45,12 @@ export function OracleResult({ birdCategory, onSubmit, onPrev, isSubmitting }: O
 
       </div>
 
-      <div className="flex flex-col-reverse md:flex-row md:justify-between gap-4 pb-4">
-       
-        <Button type="button" onClick={onSubmit} disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Join the Ventara Adventure'}
+      <div className="flex justify-center pt-4">
+        <Button type="button" onClick={onBackToHome}>
+          Back to Homepage
         </Button>
       </div>
+
     </div>
   );
 }
