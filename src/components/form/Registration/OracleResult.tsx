@@ -1,5 +1,6 @@
 import { Button } from "@/components/Button";
 import { BirdType, BIRD_VIDEO_MAP } from "./types";
+import { PAYMENT_INFO } from "@/lib/constants";
 
 type OracleResultProps = {
   birdCategory: BirdType;
@@ -12,7 +13,7 @@ export function OracleResult({ birdCategory, onBackToHome }: OracleResultProps) 
   return (
     <div className="flex flex-col gap-8 pt-4">
       <div>
-        <h2 className="text-3xl font-bold text-white mb-4">Your Bird Family</h2>
+        <h2 className="text-3xl font-bold text-white mb-4">You are registered!</h2>
         <p className="text-gray-200">
           The Metta-Oracle has spoken and revealed your true nature.
         </p>
@@ -39,8 +40,21 @@ export function OracleResult({ birdCategory, onBackToHome }: OracleResultProps) 
           </p>
         </div>
         
-        <div className="bg-purple-500/10 border border-purple-400/30 rounded-lg p-4 text-gray-200 text-sm leading-relaxed italic">
-          The Oracle is all knowing and might have placed you in a family that you didn&apos;t know you were part of deep down in your unconscious. Even if this doesn&apos;t seem like a perfect fit, we&apos;d like to encourage you to embrace the oracle&apos;s wisdom and always remember that you sure as hell will be part of a beautiful flock of birdies
+        <div className="bg-purple-500/10 border border-purple-400/30 rounded-lg p-4 text-gray-200 text-sm leading-relaxed">
+          <p className="mb-3">
+            <strong>Welcome to the flock!</strong> Your registration is complete and your nest-spot is temporarily reserved for one week.
+          </p>
+          <p className="mb-3">
+            <strong>Next:</strong> Complete your payment to secure your spot:
+          </p>
+          <ul className="mb-3 ml-4 text-xs space-y-1">
+            <li>• <strong>Revolut:</strong> Send directly to {PAYMENT_INFO.revolut.name} ({PAYMENT_INFO.revolut.phone})</li>
+            <li>• <strong>Bank Transfer:</strong> IBAN {PAYMENT_INFO.iban}, {PAYMENT_INFO.accountHolder}, {PAYMENT_INFO.address}</li>
+            <li>• <strong>Twint:</strong> <a href={PAYMENT_INFO.twint.link} target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:text-blue-100 underline">Pay now</a></li>
+          </ul>
+          <p className="italic">
+            Even if this family doesn&apos;t seem like a perfect fit, embrace the Oracle&apos;s wisdom—you&apos;re part of our beautiful flock! 🐦✨
+          </p>
         </div>
 
       </div>

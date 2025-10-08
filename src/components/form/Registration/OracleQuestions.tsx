@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/Button";
 import { Textarea } from "@/components/form/inputs/Textarea";
 import { oracleSchema, OracleFormData, BirdType, BIRD_VIDEO_MAP } from "./types";
+import { isDev } from "@/lib/constants";
 
 type OracleQuestionsProps = {
   onNext: (data: OracleFormData) => void;
@@ -72,6 +73,20 @@ export function OracleQuestions({
       setShowErrorModal(true);
       setIsConsulting(false);
     }
+  };
+
+  const handleSkip = () => {
+    // Mock data for skipping the oracle questions in dev mode
+    const mockData: OracleFormData = {
+      question1: "My soul appeared in ancient times, filled with mystical wisdom and cosmic energy that transcends the boundaries of time and space.",
+      question2: "Good flying requires perfect harmony between body, mind, and spirit - a delicate balance of intuition, grace, and the unseen forces that guide us through the ether.",
+      question3: "My ideal nest is hidden in the twilight zones - a sanctuary where shadows dance with fading light, surrounded by ancient trees and forgotten wisdom.",
+      question4: "I would send out haunting calls that echo through the darkness - melodic combinations that carry emotion and location across vast distances.",
+      question5: "I flourish in mysterious, shadowy environments with mystical energy - places where the veil between worlds grows thin and secrets unfold.",
+      question6: "My mating ritual involves elaborate aerial displays under the full moon - weaving stories through movement and calling out in haunting melodies.",
+      birdCategory: "Night Birds",
+    };
+    onNext(mockData);
   };
 
   return (
@@ -155,9 +170,20 @@ export function OracleQuestions({
       )}
 
       <div className="flex flex-col-reverse md:flex-row md:justify-between gap-4 pt-4">
-        <Button variant="secondary" type="button" onClick={onPrev}>
-          Back
-        </Button>
+        <div className="flex gap-4">
+          <Button variant="secondary" type="button" onClick={onPrev}>
+            Back
+          </Button>
+          {isDev && (
+            <Button
+              type="button"
+              onClick={handleSkip}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              🚀 Skip Oracle (Dev Only)
+            </Button>
+          )}
+        </div>
         <Button type="submit" disabled={isConsulting}>
           {isConsulting
             ? "Consulting the Oracle..."
