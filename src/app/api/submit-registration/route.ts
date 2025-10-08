@@ -262,11 +262,21 @@ export async function POST(request: NextRequest) {
       console.log('Skipping email - Gmail credentials not configured (GMAIL_USER or GMAIL_APP_PASSWORD missing)');
     }
 
-    return NextResponse.json({
+    const responseJson = NextResponse.json({
       success: true,
       submissionId,
       notionPageId: response.id,
     });
+
+    // Set cookie to indicate successful registration (not httpOnly so client can check)
+    responseJson.cookies.set('mettaway_registered', 'true', {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 365, // 1 year
+    });
+
+    return responseJson;
   } catch (error) {
     console.error('Error submitting to Notion:', error);
     return NextResponse.json(

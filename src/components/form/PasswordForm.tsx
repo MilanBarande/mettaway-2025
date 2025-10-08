@@ -42,7 +42,7 @@ export function PasswordForm({ onRedirecting }: { onRedirecting?: (redirecting: 
         // Redirect to registration page after a brief delay
         setTimeout(() => {
           router.push('/register');
-        }, 800);
+        }, 500);
       }
     } catch (error) {
       setMessage("An error occurred. Please try again.");
