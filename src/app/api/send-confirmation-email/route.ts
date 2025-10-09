@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { PAYMENT_INFO } from '@/lib/constants';
-import { BirdType, BIRD_VIDEO_MAP } from '@/components/form/Registration/types';
+import { BirdType, BIRD_VIDEO_MAP, BIRD_COLLECTIVE_MAP } from '@/components/form/Registration/types';
 
 type EmailData = {
   firstName: string;
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
               ${data.birdCategory ? `
               <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: black; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center;">
                 <h3 style="margin: 0 0 10px 0;">🐦 Your Bird Family</h3>
-                <p style="font-size: 18px; font-weight: bold; margin: 0;">You are part of the <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/bird-families/${BIRD_VIDEO_MAP[data.birdCategory]}" style="color: black; text-decoration: underline; font-weight: bold;"><strong>${data.birdCategory}</strong> family!</a></p>
+                <p style="font-size: 18px; font-weight: bold; margin: 0;">You are part of <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/bird-families/${BIRD_VIDEO_MAP[data.birdCategory]}" style="color: black; text-decoration: underline; font-weight: bold;"><strong>${BIRD_COLLECTIVE_MAP[data.birdCategory]}</strong>!</a></p>
                 <p style="margin: 10px 0 0 0; font-style: italic;">The Metta-Oracle has revealed your true nature. Embrace your flock! 🌟</p>
               </div>
               ` : ''}

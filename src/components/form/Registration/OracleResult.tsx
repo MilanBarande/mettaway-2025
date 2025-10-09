@@ -1,5 +1,5 @@
 import { Button } from "@/components/Button";
-import { BirdType, BIRD_VIDEO_MAP } from "./types";
+import { BirdType, BIRD_VIDEO_MAP, BIRD_COLLECTIVE_MAP } from "./types";
 import { PAYMENT_INFO } from "@/lib/constants";
 
 type OracleResultProps = {
@@ -34,9 +34,9 @@ export function OracleResult({ birdCategory, onBackToHome }: OracleResultProps) 
           />
         </div>
         <div className="bg-blue-500/20 border-2 border-blue-400 rounded-lg p-6 text-center animate-fade-in max-w-md mx-auto">
-        
+
           <p className="text-blue-200 text-2xl font-bold">
-            You are part of the {birdCategory} family
+            You are part of {BIRD_COLLECTIVE_MAP[birdCategory]}
           </p>
         </div>
         

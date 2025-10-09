@@ -132,15 +132,15 @@ Based on their personality traits, temporal origins, and spiritual essence revea
 
 Category characteristics to consider:
 - Mythical Birds: ancient, mystical, legendary
-- Mecha Birds: futuristic, technological, mechanical
-- Folded Birds: delicate, crafted, paper-like
+- Mechanical Birds: futuristic, technological, mechanical
+- Origami Birds: delicate, crafted, paper-like
 - Night Birds / Dark Birds: nocturnal, mysterious, shadowy
-- Ocean Birds: coastal, water-loving, shore-dwelling
+- Sea Birds: coastal, water-loving, shore-dwelling
 - Birds of Paradise: tropical, exotic, vibrant
-- Digital Birds: playful, modern, animated, electronic
+- Fancy Birds: well dressed, extrovert, bohemian
 - Chicks: young, fresh, energetic
 - Birds of Prey: powerful, precise, aerodynamic
-- Walking Birds: grounded, functional, terrestrial
+- Ground Birds: grounded, functional, terrestrial
 - Ancient Birds: prehistoric, ancient, primal
 
 Respond with ONLY the exact bird category name from the list above, nothing else.`;

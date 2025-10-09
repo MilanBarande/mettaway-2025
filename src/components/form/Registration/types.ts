@@ -3,13 +3,13 @@ import { z } from "zod";
 // Bird categories
 export const BIRD_CATEGORIES = [
   "Birds of Paradise",
-  "Folded Birds",
-  "Walking Birds",
-  "Ocean Birds",
+  "Origami Birds",
+  "Ground Birds",
+  "Sea Birds",
   "Ancient Birds",
-  "Digital Birds",
+  "Fancy Birds",
   "Chicks",
-  "Mecha Birds",
+  "Mechanical Birds",
   "Night Birds",
   "Dark Birds",
   "Mythical Birds",
@@ -21,17 +21,33 @@ export type BirdType = typeof BIRD_CATEGORIES[number];
 // Map bird categories to video filenames
 export const BIRD_VIDEO_MAP: Record<BirdType, string> = {
   "Birds of Paradise": "Birds of Paradise.mp4",
-  "Folded Birds": "Folded Birds.mp4",
-  "Walking Birds": "Walking Birds.mp4",
-  "Ocean Birds": "Birds of the seas.mp4",
+  "Origami Birds": "Folded Birds.mp4",
+  "Ground Birds": "Walking Birds.mp4",
+  "Sea Birds": "Birds of the seas.mp4",
   "Ancient Birds": "Ancient Birds.mp4",
-  "Digital Birds": "Digital Birds.mp4",
+  "Fancy Birds": "Fancy Birds.mp4",
   "Chicks": "Chicks.mp4",
-  "Mecha Birds": "Mecha Birds.mp4",
+  "Mechanical Birds": "Mecha Birds.mp4",
   "Night Birds": "Night Birds.mp4",
   "Dark Birds": "Dark Birds.mp4",
   "Mythical Birds": "Mythical Birds.mp4",
   "Birds of Prey": "Birds of Prey.mp4",
+};
+
+// Map bird categories to collective phrases
+export const BIRD_COLLECTIVE_MAP: Record<BirdType, string> = {
+  "Birds of Paradise": "a kaleidoscope of birds of paradise",
+  "Origami Birds": "a fold of origami birds",
+  "Ground Birds": "a stroll of ground birds",
+  "Sea Birds": "a plunge of sea birds",
+  "Ancient Birds": "a relic of ancient birds",
+  "Fancy Birds": "a fantasy of fancy birds",
+  "Chicks": "a curiosity of chicks",
+  "Mechanical Birds": "a craft of mechanical birds",
+  "Night Birds": "a noctuid of night birds",
+  "Dark Birds": "a blackout of dark birds",
+  "Mythical Birds": "a divine of mystical birds",
+  "Birds of Prey": "a cast of birds of prey",
 };
 
 // Step 2 (Identity) validation schema
