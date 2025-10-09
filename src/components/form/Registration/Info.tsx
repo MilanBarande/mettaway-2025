@@ -35,11 +35,11 @@ export function Info({ onNext }: InfoProps) {
         </p>
 
         <p className="mb-4">
-          <strong>Mission:</strong> Ventara is a prolonged weekend among space friends — everybird partaking is responsible for their success and every helping wing, beak, and voice is needed.
+          <strong>Mission:</strong> Ventara is a prolonged weekend among friends — every bird partaking is responsible for their success and every helping wing, beak, and voice is needed.
         </p>
 
         <p className="mb-4">
-          <strong>Timeline:</strong> Our 7th voyage will last from November 27th to 1st of December 2025 in earth time. Early arrival on Thursday morning to build up the mother-nest is possible and appreciated.
+          <strong>Timeline:</strong> Our 7th voyage will last from November 27th to 1st of December 2025 in earth time. Early arrival on Thursday morning to build up and on Monday to build down the mother-nest is possible and appreciated (we need every helping claw).
         </p>
 
         <p className="mb-4">
@@ -52,17 +52,17 @@ export function Info({ onNext }: InfoProps) {
 
         <ul className="list-disc list-inside mb-4 space-y-2">
           <li>
-            <strong>Round 1:</strong> Invitation only through the flocks of Ventare. (First come – first serve.) Sign-up window stays open for two weeks until we start round two.
+            <em><strong>Round 1:</strong>Invitation only through the flocks of Ventara. (First come – first serve.) Sign-up window stays open for two weeks until we start round two.</em>
           </li>
           <li>
-            <strong>Round 2:</strong> The remaining spots will be posted as usual in our communication Channel (First come – first serve)
+            <em><strong>Round 2:</strong>The remaining spots will be posted as usual in our communication-Channel (First come – first serve)</em>
           </li>
         </ul>
 
         <p className="mb-4">There will be a waiting list once all nest-spots are reserved.</p>
 
         <p className="mb-4 font-semibold">
-          Please remember: There are a few agreements the flocks of Ventare came to terms with after the past voyages to ensure peace and harmony:
+          Please remember: There are a few agreements the Flocks of Ventara came to terms with after the past voyages to ensure peace and harmony:
         </p>
 
         <ul className="list-disc list-inside mb-4 space-y-2">
