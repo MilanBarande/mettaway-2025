@@ -14,7 +14,11 @@ type WorkshopsMusicProps = {
   defaultValues?: Partial<WorkshopsMusicFormData>;
 };
 
-export function WorkshopsMusic({ onNext, onPrev, defaultValues }: WorkshopsMusicProps) {
+export function WorkshopsMusic({
+  onNext,
+  onPrev,
+  defaultValues,
+}: WorkshopsMusicProps) {
   const {
     register,
     handleSubmit,
@@ -40,12 +44,17 @@ export function WorkshopsMusic({ onNext, onPrev, defaultValues }: WorkshopsMusic
   return (
     <form onSubmit={handleSubmit(onNext)} className="flex flex-col gap-8 pt-4">
       <div>
-        <h2 className="text-3xl font-bold text-white mb-4">Workshops and Music</h2>
+        <h2 className="text-3xl font-bold text-white mb-4">
+          Workshops and Music
+        </h2>
         <p className="text-gray-200">
-          Further on, everyone is invited to contribute even more: DJ, play live music on 
-          unplugged Sunday, offer a workshop, yoga class, space cookies, sound healing, you 
-          name it. Would you care to give us a rough idea of what you have in mind? This is 
-          not mandatory of course!
+          Further on, everyone is invited to contribute even more: DJ, play live
+          music on unplugged Sunday, offer a workshop, yoga class, sound
+          healing, a forum/plenum to a specific topic you name it. Would you
+          care to give us a rough idea of what you have in mind? This is not
+          mandatory, but you are most welcome to contribute or even offer your
+          first workshop if you feel passionate about something. :) birds are a
+          great crowd to try something out!
         </p>
       </div>
 
@@ -83,13 +92,13 @@ export function WorkshopsMusic({ onNext, onPrev, defaultValues }: WorkshopsMusic
 
             <Textarea
               label=""
-              placeholder="Characteristics (size, noise level) of the space you require for the workshop"
+              placeholder="Special Requirements (is there a max. Number of participants, do you need speakers / music / yoga mats / microphone etc., do you hold the workshop together with someone else?"
               {...register("workshopSpace")}
               error={errors.workshopSpace?.message}
             />
 
             <RadioGroup
-              label="I can share the space with others"
+              label="Other people or workshops can take place in the same room during the workshop"
               name="shareSpace"
               options={shareSpaceOptions}
               value={shareSpaceValue}
@@ -106,13 +115,15 @@ export function WorkshopsMusic({ onNext, onPrev, defaultValues }: WorkshopsMusic
 
         <div className="text-gray-200 space-y-2">
           <p>
-            As we usually have many talented and creative creatures among us, it has proven a 
-            challenging affair to give everyone the stage for a certain time. As we expect this 
-            to be similar this time around, we will curate the DJ lineup based on the following 
-            criteria:
+            As we usually have many talented and creative creatures among us, it
+            has proven a challenging affair to give everyone the stage for a
+            certain time. As we expect this to be similar this time around, we
+            will curate the DJ lineup based on the following criteria:
           </p>
           <ul className="list-disc list-inside space-y-1 ml-4">
-            <li>signup date (the earlier, the higher the chances to get a spot)</li>
+            <li>
+              signup date (the earlier, the higher the chances to get a spot)
+            </li>
             <li>previous appearances (the more, the lower the chances)</li>
             <li>gender (ensuring diversity)</li>
             <li>experience (providing spots for fresh DJs)</li>
@@ -180,4 +191,3 @@ export function WorkshopsMusic({ onNext, onPrev, defaultValues }: WorkshopsMusic
     </form>
   );
 }
-
