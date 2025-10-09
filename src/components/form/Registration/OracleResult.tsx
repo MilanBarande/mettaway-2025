@@ -29,7 +29,7 @@ export function OracleResult({ birdCategory, onBackToHome }: OracleResultProps) 
             muted
             playsInline
             preload="auto"
-            className="w-full h-auto"
+            className="w-full h-64 object-cover"
             style={{ display: 'block' }}
           />
         </div>
