@@ -25,10 +25,14 @@ export function OracleQuestions({
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm<OracleFormData>({
     resolver: zodResolver(oracleSchema),
     defaultValues,
   });
+
+  // Watch form values for character counting
+  const watchedValues = watch();
 
   const handleFormSubmit = async (data: OracleFormData) => {
     setIsConsulting(true);
@@ -108,6 +112,9 @@ export function OracleQuestions({
           label="When did your soul appear on this planet?"
           placeholder="Share your answer..."
           required
+          maxLength={300}
+          showCharacterCount={true}
+          value={watchedValues.question1 || ""}
           {...register("question1")}
           error={errors.question1?.message}
         />
@@ -116,6 +123,9 @@ export function OracleQuestions({
           label="What makes for good flying?"
           placeholder="Share your answer..."
           required
+          maxLength={300}
+          showCharacterCount={true}
+          value={watchedValues.question2 || ""}
           {...register("question2")}
           error={errors.question2?.message}
         />
@@ -124,6 +134,9 @@ export function OracleQuestions({
           label="Describe your ideal nest"
           placeholder="Share your answer..."
           required
+          maxLength={300}
+          showCharacterCount={true}
+          value={watchedValues.question3 || ""}
           {...register("question3")}
           error={errors.question3?.message}
         />
@@ -132,6 +145,9 @@ export function OracleQuestions({
           label="You just lost your group, how do you call them back?"
           placeholder="Share your answer..."
           required
+          maxLength={300}
+          showCharacterCount={true}
+          value={watchedValues.question4 || ""}
           {...register("question4")}
           error={errors.question4?.message}
         />
@@ -140,6 +156,9 @@ export function OracleQuestions({
           label="In what kind of environment do you flourish the most?"
           placeholder="Share your answer..."
           required
+          maxLength={300}
+          showCharacterCount={true}
+          value={watchedValues.question5 || ""}
           {...register("question5")}
           error={errors.question5?.message}
         />
@@ -148,6 +167,9 @@ export function OracleQuestions({
           label="Tell me about your mating ritual"
           placeholder="Share your answer..."
           required
+          maxLength={300}
+          showCharacterCount={true}
+          value={watchedValues.question6 || ""}
           {...register("question6")}
           error={errors.question6?.message}
         />

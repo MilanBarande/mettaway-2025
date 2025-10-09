@@ -104,22 +104,22 @@ export type WorkshopsMusicFormData = z.infer<typeof workshopsMusicSchema>;
 export const oracleSchema = z.object({
   question1: z.string()
     .min(10, "Please provide at least 10 characters")
-    .max(200, "Please keep your answer under 200 characters"),
+    .max(300, "Please keep your answer under 300 characters"),
   question2: z.string()
     .min(10, "Please provide at least 10 characters")
-    .max(200, "Please keep your answer under 200 characters"),
+    .max(300, "Please keep your answer under 300 characters"),
   question3: z.string()
     .min(10, "Please provide at least 10 characters")
-    .max(200, "Please keep your answer under 200 characters"),
+    .max(300, "Please keep your answer under 300 characters"),
   question4: z.string()
     .min(10, "Please provide at least 10 characters")
-    .max(200, "Please keep your answer under 200 characters"),
+    .max(300, "Please keep your answer under 300 characters"),
   question5: z.string()
     .min(10, "Please provide at least 10 characters")
-    .max(200, "Please keep your answer under 200 characters"),
+    .max(300, "Please keep your answer under 300 characters"),
   question6: z.string()
     .min(10, "Please provide at least 10 characters")
-    .max(200, "Please keep your answer under 200 characters"),
+    .max(300, "Please keep your answer under 300 characters"),
   birdCategory: z.string().optional(),
 });
 

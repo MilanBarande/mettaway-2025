@@ -15,11 +15,11 @@ export function Info({ onNext }: InfoProps) {
         </p>
 
         <p className="mb-4 italic">
-          <em>It took millennia for these patterns to turn into melodies, the melodies into voices, and for us winged ones to shape these voices into songs. We have all heard them – we all know them. But remember: No one felt this rhythm like the ancient winged one, O'Pteryx, the mother of us all. Don't we still tell our hatchlings of her moves and her songs? Since her time, many moons have gone through their cycles. Though we still hear the faint rhythm, what we remember are only fragments, stories – not the songs themselves.</em>
+          <em>It took millennia for these patterns to turn into melodies, the melodies into voices, and for us winged ones to shape these voices into songs. We have all heard them – we all know them. But remember: No one felt this rhythm like the ancient winged one, O&apos;Pteryx, the mother of us all. Don&apos;t we still tell our hatchlings of her moves and her songs? Since her time, many moons have gone through their cycles. Though we still hear the faint rhythm, what we remember are only fragments, stories – not the songs themselves.</em>
         </p>
 
         <p className="mb-4 italic">
-          <em>Explorers - the time has come and the chance to rejoice is nigh. Join us, fellow winged-ones , wherever you are. Join us on Ventara, the home planet of O'Pteryx, to bring our voices together, to move collectively, and to rediscover the very rhythm of the mother herself.</em>
+          <em>Explorers - the time has come and the chance to rejoice is nigh. Join us, fellow winged-ones , wherever you are. Join us on Ventara, the home planet of O&apos;Pteryx, to bring our voices together, to move collectively, and to rediscover the very rhythm of the mother herself.</em>
         </p>
 
         <p className="mb-4">
@@ -31,11 +31,11 @@ export function Info({ onNext }: InfoProps) {
         </p>
 
         <p className="mb-4">
-          <strong>Coordinates:</strong> We'll be in the same location of past voyages. You will be provided with further coordinates to find Ventara after your signup.
+          <strong>Coordinates:</strong> We&apos;ll be in the same location of past voyages. You will be provided with further coordinates to find Ventara after your signup.
         </p>
 
         <p className="mb-4">
-          <strong>Next steps:</strong> If you'd like to join, please fill out the following scroll and wire your financial contribution. This is a personal invite of the flocks of Ventara. Please do not share this link.
+          <strong>Next steps:</strong> If you&apos;d like to join, please fill out the following scroll and wire your financial contribution. This is a personal invite of the flocks of Ventara. Please do not share this link.
         </p>
 
         <p className="mb-4">There will be a waiting list once all nest-spots are reserved.</p>
@@ -57,7 +57,7 @@ export function Info({ onNext }: InfoProps) {
           <strong>Spread your feathers, catch the currents.</strong>
         </p>
 
-        <p className="mb-4 italic">We shall be as loud and beautiful as O'Pteryx.</p>
+        <p className="mb-4 italic">We shall be as loud and beautiful as O&apos;Pteryx.</p>
 
         <p className="mb-4 italic">We shall be as colorful as we were always meant to be.</p>
 
