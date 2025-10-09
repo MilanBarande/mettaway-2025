@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { PAYMENT_INFO } from '@/lib/constants';
 import { BirdType, BIRD_VIDEO_MAP, BIRD_COLLECTIVE_MAP } from '@/components/form/Registration/types';
+import * as Sentry from '@sentry/nextjs';
 
 type EmailData = {
   firstName: string;
@@ -15,6 +16,31 @@ export async function POST(request: NextRequest) {
   try {
     const data: EmailData = await request.json();
 
+    // Validate environment variables
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+      Sentry.captureMessage('Missing Gmail credentials for email service', {
+        level: 'error',
+        extra: {
+          hasUser: !!process.env.GMAIL_USER,
+          hasPassword: !!process.env.GMAIL_APP_PASSWORD,
+        },
+      });
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Email service not configured - missing Gmail credentials',
+          details: 'GMAIL_USER or GMAIL_APP_PASSWORD not set'
+        },
+        { status: 500 }
+      );
+    }
+
+    Sentry.addBreadcrumb({
+      message: 'Creating Gmail transporter',
+      data: { gmailUser: process.env.GMAIL_USER },
+      level: 'info',
+    });
+
     // Create nodemailer transporter for Gmail
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -22,7 +48,30 @@ export async function POST(request: NextRequest) {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_APP_PASSWORD, // Use App Password, not regular password
       },
+      debug: process.env.NODE_ENV === 'development', // Enable debug in development
     });
+
+    // Test the connection
+    try {
+      await transporter.verify();
+      Sentry.addBreadcrumb({
+        message: 'Gmail SMTP connection verified successfully',
+        level: 'info',
+      });
+    } catch (verifyError) {
+      Sentry.captureException(verifyError, {
+        tags: { component: 'email', operation: 'smtp_verify' },
+        extra: { gmailUser: process.env.GMAIL_USER },
+      });
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Email service connection failed',
+          details: verifyError instanceof Error ? verifyError.message : 'SMTP connection error'
+        },
+        { status: 500 }
+      );
+    }
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -104,6 +153,12 @@ export async function POST(request: NextRequest) {
     `;
 
     try {
+      Sentry.addBreadcrumb({
+        message: 'Attempting to send confirmation email',
+        data: { recipient: data.email, submissionId: data.submissionId },
+        level: 'info',
+      });
+      
       const info = await transporter.sendMail({
         from: `Mettaway <${process.env.GMAIL_USER}>`,
         to: data.email,
@@ -112,19 +167,43 @@ export async function POST(request: NextRequest) {
         html: emailHtml,
       });
 
+      Sentry.addBreadcrumb({
+        message: 'Email sent successfully',
+        data: {
+          messageId: info.messageId,
+          recipient: data.email,
+          submissionId: data.submissionId,
+        },
+        level: 'info',
+      });
+
       return NextResponse.json({
         success: true,
         emailId: info.messageId,
       });
     } catch (emailError) {
-      console.error('Error sending email:', emailError);
+      Sentry.captureException(emailError, {
+        tags: { component: 'email', operation: 'send_mail' },
+        extra: {
+          recipient: data.email,
+          submissionId: data.submissionId,
+          gmailUser: process.env.GMAIL_USER,
+        },
+      });
+      
       return NextResponse.json(
-        { success: false, error: 'Failed to send email' },
+        { 
+          success: false, 
+          error: 'Failed to send email',
+          details: emailError instanceof Error ? emailError.message : 'Unknown error',
+        },
         { status: 500 }
       );
     }
   } catch (error) {
-    console.error('Error in email route:', error);
+    Sentry.captureException(error, {
+      tags: { component: 'email', operation: 'route_handler' },
+    });
     return NextResponse.json(
       { 
         success: false, 
