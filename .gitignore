@@ -45,3 +45,5 @@ next-env.d.ts
 
 # Sentry example page
 src/app/sentry-example-page/
+
+.vscode/
