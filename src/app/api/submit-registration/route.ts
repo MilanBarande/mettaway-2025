@@ -120,7 +120,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'A registration with this email already exists',
+          error: 'A registration with this email already exists. Please check your inbox for a confirmation email, or contact us if you need to make changes to your registration.',
+          details: 'Duplicate registration attempt detected',
         },
         { status: 409 } // 409 Conflict
       );

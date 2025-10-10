@@ -88,7 +88,29 @@ export function RegistrationForm() {
 
       // Check if response is ok before trying to parse JSON
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        let errorResult;
+        try {
+          errorResult = await response.json();
+        } catch (parseError) {
+          // If we can't parse the error response, throw a generic error
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        // Handle specific error cases with user-friendly messages
+        if (response.status === 409) {
+          alert(
+            errorResult.error || "It looks like you've already registered with this email address! Please check your inbox for a confirmation email, or contact us if you need to make changes to your registration."
+          );
+          setIsSubmitting(false);
+          return;
+        }
+
+        // For other API errors, show the server-provided message
+        alert(
+          `Error submitting registration: ${errorResult.details || errorResult.error || 'Please try again.'}`
+        );
+        setIsSubmitting(false);
+        return;
       }
 
       const result = await response.json();
