@@ -3,6 +3,7 @@ import { Client } from '@notionhq/client';
 import { NOTION_DATABASE_ID } from '@/lib/constants';
 import { randomUUID } from 'crypto';
 import { BirdType } from '@/components/form/Registration/types';
+import * as Sentry from '@sentry/nextjs';
 
 const notion = new Client({ auth: process.env.NOTION_INTEGRATION_SECRET });
 
@@ -99,9 +100,26 @@ export async function POST(request: NextRequest) {
     });
 
     if (existingRegistration) {
+      // Log duplicate registration attempt (but don't treat as error)
+      Sentry.captureMessage('Duplicate registration attempt', {
+        level: 'info',
+        tags: {
+          errorType: 'duplicate_registration',
+          endpoint: 'submit_registration',
+        },
+        extra: {
+          email: data.identity.email,
+          existingPageId: existingRegistration.id,
+          timestamp: new Date().toISOString(),
+        },
+        user: {
+          email: data.identity.email,
+        },
+      });
+
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'A registration with this email already exists',
         },
         { status: 409 } // 409 Conflict
@@ -254,10 +272,34 @@ export async function POST(request: NextRequest) {
 
         if (!emailResponse.ok) {
           console.error('Failed to send confirmation email, but registration succeeded');
+          Sentry.captureMessage('Failed to send confirmation email', {
+            level: 'warning',
+            tags: {
+              errorType: 'email_error',
+              endpoint: 'submit_registration',
+            },
+            extra: {
+              email: data.identity.email,
+              submissionId,
+              emailResponseStatus: emailResponse.status,
+            },
+          });
         }
       } catch (emailError) {
         console.error('Error sending confirmation email:', emailError);
-        // Don't fail the registration if email fails
+        // Capture email error in Sentry but don't fail the registration
+        Sentry.captureException(emailError, {
+          level: 'warning',
+          tags: {
+            errorType: 'email_error',
+            endpoint: 'submit_registration',
+          },
+          extra: {
+            email: data.identity.email,
+            submissionId,
+            errorMessage: emailError instanceof Error ? emailError.message : 'Unknown email error',
+          },
+        });
       }
     } else {
       console.log('Skipping email - Gmail credentials not configured (GMAIL_USER or GMAIL_APP_PASSWORD missing)');
@@ -280,9 +322,23 @@ export async function POST(request: NextRequest) {
     return responseJson;
   } catch (error) {
     console.error('Error submitting to Notion:', error);
+
+    // Capture server error in Sentry with context
+    Sentry.captureException(error, {
+      tags: {
+        errorType: 'server_error',
+        endpoint: 'submit_registration',
+      },
+      extra: {
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        errorStack: error instanceof Error ? error.stack : undefined,
+        timestamp: new Date().toISOString(),
+      },
+    });
+
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to submit registration',
         details: error instanceof Error ? error.message : 'Unknown error',
       },

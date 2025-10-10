@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import * as Sentry from "@sentry/nextjs";
 import { Info } from "./Info";
 import { Identity } from "./Identity";
 import { Logistics } from "./Logistics";
@@ -108,6 +109,23 @@ export function RegistrationForm() {
         setIsSubmitting(false);
       }
     } catch (error) {
+      // Capture network error in Sentry with additional context
+      Sentry.captureException(error, {
+        tags: {
+          errorType: 'network_error',
+          step: 'contribution_submission',
+          currentStep: currentStep,
+        },
+        extra: {
+          formData,
+          errorMessage: error instanceof Error ? error.message : 'Unknown network error',
+          errorStack: error instanceof Error ? error.stack : undefined,
+        },
+        user: {
+          email: formData.identity?.email,
+        },
+      });
+
       alert("Network error. Please try again.");
       console.error("Network error:", error);
       setIsSubmitting(false);
