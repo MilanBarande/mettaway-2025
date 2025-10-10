@@ -10,12 +10,12 @@ type TextareaProps = {
 } & React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ label, error, required, maxLength, showCharacterCount, value = "", ...props }, ref) => {
-    const [charCount, setCharCount] = useState(value.length);
+  ({ label, error, required, maxLength, showCharacterCount, value, ...props }, ref) => {
+    const [charCount, setCharCount] = useState((value || "").length);
 
     // Update character count when value changes (for react-hook-form integration)
     useEffect(() => {
-      setCharCount(value.length);
+      setCharCount((value || "").length);
     }, [value]);
 
     const isNearLimit = maxLength && charCount > maxLength * 0.8;
@@ -31,7 +31,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         <textarea
           ref={ref}
           maxLength={maxLength}
-          value={value}
           className={`px-4 py-2 rounded-md bg-white/90 backdrop-blur-sm text-gray-900 placeholder-gray-500 border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[100px] resize-y ${
             isOverLimit
               ? "border-red-500 focus:ring-red-500"
