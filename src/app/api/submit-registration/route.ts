@@ -213,7 +213,7 @@ export async function POST(request: NextRequest) {
           rich_text: [{ text: { content: data.workshopsMusic?.workshopDescription || '' } }],
         },
         'Workshop Share Space': {
-          select: { name: data.workshopsMusic?.shareSpace || '' },
+          select: data.workshopsMusic?.shareSpace ? { name: data.workshopsMusic.shareSpace } : null,
         },
         'Email': {
           rich_text: [{ text: { content: data.identity.email } }],
