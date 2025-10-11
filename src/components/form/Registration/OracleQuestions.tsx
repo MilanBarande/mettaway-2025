@@ -103,7 +103,7 @@ export function OracleQuestions({
           Consult the Metta-Oracle 
         </h2>
         <p className="text-gray-200">
-          First of all, the Metta-Oracle needs to know a few things about you. There is no right or wrong here and there are absolutely no consequences for you to be admitted to the voyage or not. just type away, whatever comes spontaneously to your mind.
+          First of all, the Metta-Oracle needs to know a few things about you. There is no right or wrong here and there are absolutely no consequences for you to be admitted to the voyage or not. Just type away, whatever comes spontaneously to your mind.
         </p>
       </div>
 
