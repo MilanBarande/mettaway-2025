@@ -42,7 +42,7 @@ export function Identity({ onNext, onPrev, defaultValues }: IdentityProps) {
     { value: "female", label: "Female" },
     { value: "male", label: "Male" },
     { value: "diverse", label: "Diverse" },
-    { value: "prefer-not-to-say", label: "Prefer not to say" },
+    { value: "prefer not to choose", label: "Prefer not to say" },
   ];
 
   return (
