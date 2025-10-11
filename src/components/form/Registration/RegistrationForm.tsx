@@ -71,7 +71,8 @@ export function RegistrationForm() {
   };
 
   const handleContributionSubmit = async (data: ContributionFormData) => {
-    setFormData({ ...formData, contribution: data });
+    const updatedFormData = { ...formData, contribution: data };
+    setFormData(updatedFormData);
 
     if (isSubmitting) return; // Prevent double submission
 
@@ -83,7 +84,7 @@ export function RegistrationForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedFormData),
       });
 
       // Check if response is ok before trying to parse JSON
@@ -91,7 +92,7 @@ export function RegistrationForm() {
         let errorResult;
         try {
           errorResult = await response.json();
-        } catch (parseError) {
+        } catch {
           // If we can't parse the error response, throw a generic error
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }

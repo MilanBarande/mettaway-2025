@@ -92,7 +92,7 @@ export const workshopsMusicSchema = z.object({
   shareSpace: z.string().optional(),
   playDjSet: z.boolean().optional(),
   djDayTime: z.string().optional(),
-  soundcloudLink: z.string().optional(),
+  soundcloudLink: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
   musicStyle: z.string().optional(),
   playUnplugged: z.boolean().optional(),
   unpluggedDescription: z.string().optional(),
