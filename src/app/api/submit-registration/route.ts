@@ -225,7 +225,7 @@ export async function POST(request: NextRequest) {
           checkbox: data.workshopsMusic?.playDjSet || false,
         },
         'Soundcloud': {
-          rich_text: [{ text: { content: data.workshopsMusic?.soundcloudLink || '' } }],
+          url: data.workshopsMusic?.soundcloudLink || null,
         },
         'Sound Description': {
           rich_text: [{ text: { content: data.workshopsMusic?.musicStyle || '' } }],
@@ -279,7 +279,7 @@ export async function POST(request: NextRequest) {
           select: { name: data.identity.genderIdentity },
         },
         'Payment intention': {
-          rich_text: [{ text: { content: data.contribution.contributionAmount || '' } }],
+          number: parseInt(data.contribution.contributionAmount) || null,
         }
       },
     });
