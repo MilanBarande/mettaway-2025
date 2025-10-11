@@ -203,11 +203,35 @@ export async function POST(request: NextRequest) {
         'Workshop Space': {
           rich_text: [{ text: { content: data.workshopsMusic?.workshopSpace || '' } }],
         },
+        'Workshop Title': {
+          rich_text: [{ text: { content: data.workshopsMusic?.workshopTitle || '' } }],
+        },
+        'Workshop day/time': {
+          rich_text: [{ text: { content: data.workshopsMusic?.workshopDayTime || '' } }],
+        },
+        'Workshop description': {
+          rich_text: [{ text: { content: data.workshopsMusic?.workshopDescription || '' } }],
+        },
+        'Workshop Share Space': {
+          select: { name: data.workshopsMusic?.shareSpace || '' },
+        },
         'Email': {
           rich_text: [{ text: { content: data.identity.email } }],
         },
         'Kitchen lead': {
           checkbox: data.logistics.takeMealLead || false,
+        },
+        'DJ Set': {
+          checkbox: data.workshopsMusic?.playDjSet || false,
+        },
+        'Soundcloud': {
+          rich_text: [{ text: { content: data.workshopsMusic?.soundcloudLink || '' } }],
+        },
+        'Sound Description': {
+          rich_text: [{ text: { content: data.workshopsMusic?.musicStyle || '' } }],
+        },
+        'DJ Day/Time': {
+          rich_text: [{ text: { content: data.workshopsMusic?.djDayTime || '' } }],
         },
         'Kitchen Lead Wishes': {
           rich_text: [{ text: { content: data.logistics.mealPreference || '' } }],
@@ -254,6 +278,9 @@ export async function POST(request: NextRequest) {
         'Gender': {
           select: { name: data.identity.genderIdentity },
         },
+        'Payment intention': {
+          rich_text: [{ text: { content: data.contribution.contributionAmount || '' } }],
+        }
       },
     });
 
