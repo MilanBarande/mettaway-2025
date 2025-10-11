@@ -251,6 +251,9 @@ export async function POST(request: NextRequest) {
         'Mating Ritual Answer': {
           rich_text: [{ text: { content: data.oracle?.question6 || '' } }],
         },
+        'Gender': {
+          select: { name: data.identity.genderIdentity },
+        },
       },
     });
 
