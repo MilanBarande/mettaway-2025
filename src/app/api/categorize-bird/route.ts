@@ -128,7 +128,7 @@ Context about the questions:
 Their answers:
 ${answers}
 
-Based on their personality traits, temporal origins, and spiritual essence revealed through these answers, which bird category best represents them? Remember to consider the current distribution and balance the categories appropriately.
+Based on their personality traits, temporal origins, and spiritual essence revealed through these answers, which bird category best represents them? Remember to consider the current distribution and balance the categories appropriately. No category can go above 14 participants, and ideally maximum 12.
 
 Category characteristics to consider:
 - Mythical Birds: ancient, mystical, legendary
