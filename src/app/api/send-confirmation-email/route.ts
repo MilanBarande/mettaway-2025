@@ -119,6 +119,7 @@ export async function POST(request: NextRequest) {
               <div class="payment-info">
                 <h4>🏦 Bank Transfer</h4>
                 <p><strong>IBAN:</strong> ${PAYMENT_INFO.iban}</p>
+                <p><strong>BIC:</strong> ${PAYMENT_INFO.bic}</p>
                 <p><strong>Account Holder:</strong> ${PAYMENT_INFO.accountHolder}</p>
                 <p><strong>Address:</strong> ${PAYMENT_INFO.address}</p>
               </div>

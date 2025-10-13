@@ -6,6 +6,7 @@ export const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID;
 // Payment Information
 export const PAYMENT_INFO = {
   iban: process.env.NEXT_PUBLIC_PAYMENT_IBAN,
+  bic: 'KBZGCH22XXX',
   accountHolder: "appricot GmbH",
   address: "Industriestrasse 70, 6300 Zug, Switzerland",
   revolut: {

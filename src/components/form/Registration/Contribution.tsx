@@ -104,62 +104,62 @@ export function Contribution({ onSubmit, onPrev, defaultValues, isSubmitting = f
       <div className="flex flex-col gap-6">
         <h3 className="text-2xl font-bold text-white">Payment Channels</h3>
         
-        <div className="text-gray-200 space-y-4">
-          <p>
-            With the completion of this form, your seat will be temporarily reserved for a week. 
-            Only once you paid the travel fee, your seat will be unconditionally reserved for you. 
-            Money transfers can be made in the following ways:
-          </p>
-          <ul className="list-disc list-inside space-y-2 ml-4">
-            <li>Revolut directly to {PAYMENT_INFO.revolut.name} ({PAYMENT_INFO.revolut.phone})</li>
-            <li>
-              Bank transfer to{" "}
-              <span className="relative inline-block">
-                <button
-                  type="button"
-                  onClick={copyIban}
-                  className="inline-flex items-center gap-1 text-blue-300 hover:text-blue-100 underline cursor-pointer font-mono"
-                  title="Click to copy IBAN"
-                >
-                  {PAYMENT_INFO.iban}
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    width="14" 
-                    height="14" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                    className="inline-block"
-                  >
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                  </svg>
-                </button>
-                {ibanCopied && (
-                  <span className="absolute left-1/2 -translate-x-1/2 -top-8 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-                    Copied!
-                  </span>
-                )}
-              </span>
-              , {PAYMENT_INFO.accountHolder}, {PAYMENT_INFO.address}
-            </li>
-            <li>
-              Twint using{" "}
-              <a
-                href={PAYMENT_INFO.twint.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-300 hover:text-blue-100 underline cursor-pointer"
-              >
-                this link
-              </a>
-            </li>
-          </ul>
-          
-        </div>
+              <div className="text-gray-200 space-y-4">
+                <p>
+                  With the completion of this form, your seat will be temporarily reserved for a week.
+                  Only once you paid the travel fee, your seat will be unconditionally reserved for you.
+                  Money transfers can be made in the following ways:
+                </p>
+                <ul className="list-disc list-inside space-y-2 ml-4">
+                  <li>Revolut directly to {PAYMENT_INFO.revolut.name} ({PAYMENT_INFO.revolut.phone})</li>
+                  <li>
+                    Bank transfer to{" "}
+                    <span className="relative inline-block">
+                      <button
+                        type="button"
+                        onClick={copyIban}
+                        className="inline-flex items-center gap-1 text-blue-300 hover:text-blue-100 underline cursor-pointer font-mono"
+                        title="Click to copy IBAN"
+                      >
+                        {PAYMENT_INFO.iban}, 
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="inline-block"
+                        >
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                      </button>
+                      {ibanCopied && (
+                        <span className="absolute left-1/2 -translate-x-1/2 -top-8 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                          Copied!
+                        </span>
+                      )} BIC:{PAYMENT_INFO.bic}
+                    </span>
+                    , {PAYMENT_INFO.accountHolder}, {PAYMENT_INFO.address}                    
+                  </li>
+                  <li>
+                    Twint using{" "}
+                    <a
+                      href={PAYMENT_INFO.twint.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-300 hover:text-blue-100 underline cursor-pointer"
+                    >
+                      this link
+                    </a>
+                  </li>
+                </ul>
+
+              </div>
       </div>
 
       <div className="flex justify-between pt-4">
