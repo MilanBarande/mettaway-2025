@@ -74,13 +74,13 @@ function HomeContent() {
               <p className="text-sm opacity-90">You will hear from us soon with more details about your journey to Ventara.</p>
             </div>
             <p className="text-sm text-white px-4 py-2 rounded-lg backdrop-blur-md bg-black/30 text-center">
-              {count} {count === 1 ? 'bird' : 'birds'} ready to fly, {140 - count} {140 - count === 1 ? 'place' : 'places'} left in the nest
+              {count} {count === 1 ? 'bird' : 'birds'} ready to fly, {140 - count} {140 - count === 1 ? 'spot' : 'spots'} left in the nest
             </p>
           </div>
         ) : (
           <>
             <p className="text-sm text-white px-4 py-2 rounded-lg backdrop-blur-md bg-black/30 text-center">
-              {count} {count === 1 ? 'bird' : 'birds'} ready to fly, {140 - count} {140 - count === 1 ? 'place' : 'places'} left in the nest
+              {count} {count === 1 ? 'bird' : 'birds'} ready to fly, {140 - count} {140 - count === 1 ? 'spot' : 'spots'} left in the nest
             </p>
 
             <PasswordForm onRedirecting={setIsRedirecting} />
