@@ -51,7 +51,12 @@ function HomeContent() {
       window.history.replaceState({}, '', '/');
     }
   }, [searchParams]);
-  
+
+  const isFull = count >= 140;
+  const spotsLeft = 140 - count;
+  const countText = `${count} ${count === 1 ? 'bird' : 'birds'} ready to fly, ${spotsLeft === 0 ? 'no spots' : spotsLeft === 1 ? '1 spot' : `${spotsLeft} spots`} left in the nest`;
+  const isLoading = isLoadingCount || isLoadingRegistration
+
   return (
     <main className="font-sans flex flex-col items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <Birds count={count} />
@@ -63,7 +68,7 @@ function HomeContent() {
             <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin" />
             <p className="text-white text-lg">Redirecting to registration...</p>
           </div>
-        ) : isLoadingCount || isLoadingRegistration ? (
+        ) : isLoading ? (
           <div className="flex items-center justify-center px-4 py-2 rounded-lg backdrop-blur-md bg-black/30">
             <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           </div>
@@ -74,13 +79,27 @@ function HomeContent() {
               <p className="text-sm opacity-90">You will hear from us soon with more details about your journey to Ventara.</p>
             </div>
             <p className="text-sm text-white px-4 py-2 rounded-lg backdrop-blur-md bg-black/30 text-center">
-              {count} {count === 1 ? 'bird' : 'birds'} ready to fly, {140 - count} {140 - count === 1 ? 'spot' : 'spots'} left in the nest
+              {countText}
             </p>
           </div>
+        ) : isFull ? (
+          <>
+            <p className="text-sm text-white px-4 py-2 rounded-lg backdrop-blur-md bg-black/30 text-center">
+              {countText}
+            </p>
+            <a
+              href="https://nmdl.notion.site/29132652a3f3803e90d9d35f6b54e27a?pvs=105"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white text-sm px-3 py-1 rounded backdrop-blur-md bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              Waitlist
+            </a>
+          </>
         ) : (
           <>
             <p className="text-sm text-white px-4 py-2 rounded-lg backdrop-blur-md bg-black/30 text-center">
-              {count} {count === 1 ? 'bird' : 'birds'} ready to fly, {140 - count} {140 - count === 1 ? 'spot' : 'spots'} left in the nest
+              {countText}
             </p>
 
             <PasswordForm onRedirecting={setIsRedirecting} />
