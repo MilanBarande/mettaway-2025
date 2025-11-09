@@ -54,7 +54,6 @@ export function Logistics({ onNext, onPrev, defaultValues }: LogisticsProps) {
     { value: "tent", label: "I'll be sleeping in a tent" },
     { value: "bring-mattress", label: "I will bring my own mattress" },
     { value: "sharing-bed", label: "I'll be sharing the single-bed with someone (who knows about it)" },
-    { value: "need-bed", label: "I'll need a single-bed on site" },
   ];
 
   const countryOptions = [
