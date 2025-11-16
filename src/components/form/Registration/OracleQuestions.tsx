@@ -38,40 +38,21 @@ export function OracleQuestions({
     setIsConsulting(true);
 
     try {
-      const response = await fetch("/api/categorize-bird", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          question1: data.question1,
-          question2: data.question2,
-          question3: data.question3,
-          question4: data.question4,
-          question5: data.question5,
-          question6: data.question6,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (result.success && result.birdCategory) {
-        setValue("birdCategory", result.birdCategory);
-        
-        // Preload the bird video for instant rendering later
-        const videoSrc = `/bird-families/${BIRD_VIDEO_MAP[result?.birdCategory as BirdType]}`;
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'video';
-        link.href = videoSrc;
-        document.head.appendChild(link);
-        
-        onNext({ ...data, birdCategory: result.birdCategory });
-      } else {
-        console.error("Error consulting oracle:", result.error);
-        setShowErrorModal(true);
-        setIsConsulting(false);
-      }
+      // All participants are now assigned to "Chicks" category
+      const birdCategory = "Chicks" as BirdType;
+      
+      setValue("birdCategory", birdCategory);
+      
+      // Preload the bird video for instant rendering later
+      const videoSrc = `/bird-families/${BIRD_VIDEO_MAP[birdCategory]}`;
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'video';
+      link.href = videoSrc;
+      document.head.appendChild(link);
+      
+      onNext({ ...data, birdCategory });
+      setIsConsulting(false);
     } catch (error) {
       console.error("Oracle consultation error:", error);
       setShowErrorModal(true);
