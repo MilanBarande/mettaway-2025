@@ -38,8 +38,8 @@ export function OracleQuestions({
     setIsConsulting(true);
 
     try {
-      // All participants are now assigned to "Chicks" category
-      const birdCategory = "Chicks" as BirdType;
+      // All participants are now assigned to either Dark Birds or Night Birds category
+      const birdCategory = ["Dark Birds", "Night Birds"][Math.floor(Math.random() * 2)] as BirdType;
       
       setValue("birdCategory", birdCategory);
       
